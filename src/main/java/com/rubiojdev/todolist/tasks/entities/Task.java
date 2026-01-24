@@ -13,7 +13,10 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "tasks")
+@Table(name = "tasks",
+        uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "name"})
+})
 public class Task {
 
     @Id
@@ -26,7 +29,7 @@ public class Task {
     private User user;
 
     @NonNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -70,6 +70,11 @@ public class TaskServiceImpl implements TaskService{
     @Override
     @Transactional
     public TaskResponseDto createNewTask(Long userId, TaskCreateDto taskDto) {
+
+        if (repository.existsByNameIgnoreCaseAndUserId(taskDto.getName(), userId)) {
+            throw new RuntimeException("Ese nombre ya existe");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no existe"));
 
@@ -82,6 +87,14 @@ public class TaskServiceImpl implements TaskService{
     @Override
     @Transactional
     public TaskResponseDto updateTask(Long userId, Long id, TaskUpdateDto taskDto) {
+
+        if (taskDto.getName() != null &&
+                repository.existsByNameIgnoreCaseAndUserIdAndIdNot(
+                        taskDto.getName(), userId, id
+                )) {
+            throw new RuntimeException("Ese nombre ya existe");
+        }
+
         Task task = repository.findByIdAndUser(userId, id)
                 .orElseThrow(() -> new RuntimeException("Task no encontrada"));
 

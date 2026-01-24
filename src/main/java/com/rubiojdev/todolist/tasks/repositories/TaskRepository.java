@@ -48,4 +48,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("name") String name
     );
 
+    boolean existsByNameIgnoreCaseAndUserId(String name, Long userId);
+
+    boolean existsByNameIgnoreCaseAndUserIdAndIdNot(String name, Long userId, Long id);
+
 }
