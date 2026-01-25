@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-
+//Agrupar las querys por simple querys y las fetch querys
     @Query("""
             SELECT DISTINCT t
             FROM Task t
@@ -30,10 +30,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             WHERE t.user.id = :userId
             AND t.id = :id
             """)
-    Optional<Task> findByIdAndUser(
+    Optional<Task> findTaskWithItemsByIdAndUserId(
             @Param("userId") Long userId,
             @Param("id") Long id
     );
+
+    Optional<Task> findByIdAndUserId(Long id, Long userId);
 
     @Query("""
             SELECT DISTINCT t
