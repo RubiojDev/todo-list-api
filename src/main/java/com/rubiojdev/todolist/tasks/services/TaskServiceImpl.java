@@ -47,7 +47,7 @@ public class TaskServiceImpl implements TaskService{
     @Transactional(readOnly = true)
     public TaskResponseDto findTaskById(Long userId, Long id) {
 
-        Task task = repository.findByIdAndUser(userId, id)
+        Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
                 .orElseThrow(() -> new RuntimeException("id no encontrado"));
 
         return mapper.toResponseDto(task);
@@ -81,7 +81,8 @@ public class TaskServiceImpl implements TaskService{
         Task task = mapper.toEntity(taskDto);
         task.setUser(user);
 
-        return mapper.toResponseDto(repository.save(task));
+        Task saved = repository.save(task);
+        return mapper.toResponseDto(saved);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class TaskServiceImpl implements TaskService{
             throw new RuntimeException("Ese nombre ya existe");
         }
 
-        Task task = repository.findByIdAndUser(userId, id)
+        Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
                 .orElseThrow(() -> new RuntimeException("Task no encontrada"));
 
         mapper.updateEntity(task, taskDto);
@@ -106,7 +107,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     @Transactional
     public void deleteTask(Long userId, Long id) {
-        Task task = repository.findByIdAndUser(userId, id)
+        Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
                 .orElseThrow(() -> new RuntimeException("Task no encontrada"));
 
         repository.delete(task);
