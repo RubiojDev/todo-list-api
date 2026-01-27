@@ -1,6 +1,7 @@
 package com.rubiojdev.todolist.tasks.entities;
 
 import com.rubiojdev.todolist.taskitems.entities.TaskItem;
+import com.rubiojdev.todolist.users.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
