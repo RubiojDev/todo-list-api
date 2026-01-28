@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.tasks.services;
 
+import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
@@ -10,6 +11,9 @@ import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
 import com.rubiojdev.todolist.users.entities.User;
 import com.rubiojdev.todolist.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,16 +38,15 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskResponseDto> getAllTasks(Long userId) {
+    public PageResponse<TaskResponseDto> getAllTasks(Long userId, int page, int size) {
 
-        List<Task> tasks = repository.findAllByUserIdOrderByUpdatedAtDesc(userId);
-        List<TaskResponseDto> taskResponseDtos = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
 
-        for (Task task : tasks) {
-            taskResponseDtos.add(mapper.toResponseDto(task));
-        }
+        Page<Task> tasks = repository.findAllByUserIdOrderByUpdatedAtDesc(userId, pageable);
+        Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
 
-        return taskResponseDtos;
+
+        return PageResponse.toPage(taskResponseDtos);
     }
 
     @Override
@@ -58,16 +61,13 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskResponseDto> findAllTaskByName(Long userId, String name) {
+    public PageResponse<TaskResponseDto> findAllTaskByName(Long userId, String name, int page, int size) {
 
-        List<Task> tasks = repository.findAllByNameAndUser(userId, name);
-        List<TaskResponseDto> taskResponseDtos = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Task> tasks = repository.findAllByNameContainingIgnoreCaseAndUserId(name, userId, pageable);
+        Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
 
-        for (Task task : tasks) {
-            taskResponseDtos.add(mapper.toResponseDto(task));
-        }
-
-        return taskResponseDtos;
+        return PageResponse.toPage(taskResponseDtos);
     }
 
     @Override
