@@ -4,6 +4,7 @@ import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
 import com.rubiojdev.todolist.tasks.services.TaskService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -33,7 +34,7 @@ public class TaskController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<TaskResponseDto> findTaskById(@PathVariable @NotNull Long id) {
+    public ResponseEntity<TaskWhitItemsResponseDto> findTaskById(@PathVariable @NotNull Long id) {
         return ResponseEntity.ok(service.findTaskById(1L, id));
     }
 

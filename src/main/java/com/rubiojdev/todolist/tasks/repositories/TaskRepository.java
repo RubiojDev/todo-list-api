@@ -12,21 +12,15 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 //Agrupar las querys por simple querys y las fetch querys
-    @Query("""
-            SELECT DISTINCT t
-            FROM Task t
-            INNER JOIN FETCH t.taskItems ti
-            WHERE t.user.id = :userId
-            ORDER BY t.updatedAt DESC
-            """)
-    List<Task> findAllByUserId(
+
+    List<Task> findAllByUserIdOrderByUpdatedAtDesc(
             @Param("userId") Long userId
     );
 
     @Query("""
             SELECT DISTINCT t
             FROM Task t
-            INNER JOIN FETCH t.taskItems ti
+            LEFT JOIN FETCH t.taskItems ti
             WHERE t.user.id = :userId
             AND t.id = :id
             """)
@@ -40,7 +34,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("""
             SELECT DISTINCT t
             FROM Task t
-            INNER JOIN FETCH t.taskItems ti
+            LEFT JOIN FETCH t.taskItems ti
             WHERE t.user.id = :userId
             AND LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))
             ORDER BY t.updatedAt ASC
