@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class TaskItemMapperImpl implements TaskItemMapper {
     @Override
     public TaskItem toEntity(TaskItemCreateDto dto) {
-        if (dto == null) throw new RuntimeException("TaskItemCreateDto no puede ser NULL");
+        if (dto == null) throw new IllegalArgumentException("TaskItemCreateDto no puede ser NULL");
 
         TaskItem taskItem = new TaskItem();
         taskItem.setName(dto.getName().trim());

@@ -1,10 +1,13 @@
 package com.rubiojdev.todolist.users.services;
 
+import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
+import com.rubiojdev.todolist.shared.exceptions.EntotyNotFoundException;
 import com.rubiojdev.todolist.users.dtos.UserCreateDto;
 import com.rubiojdev.todolist.users.dtos.UserResponseDto;
 import com.rubiojdev.todolist.users.entities.User;
 import com.rubiojdev.todolist.users.mappers.UserMapper;
 import com.rubiojdev.todolist.users.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +29,7 @@ public class UserServiceImpl implements UserService{
 
         Long userId = 1L;
         User user =repository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new EntotyNotFoundException("Usuario no encontrado"));
 
 
         return mapper.toResponseDto(user);
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService{
         if (repository.existsByUsernameIgnoreCaseOrEmailIgnoreCase(
                 dto.getUsername(),
                 dto.getEmail())) {
-            throw new RuntimeException("Ese nombre de Usuario o Email ya estan en uso");
+            throw new DuplicateResourceException("Ese nombre de Usuario o Email ya estan en uso");
         }
 
         String password = dto.getPassword();
@@ -60,7 +63,7 @@ public class UserServiceImpl implements UserService{
 
         Long userId = 1L;
         User user = repository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
         repository.delete(user);
     }

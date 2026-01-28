@@ -9,6 +9,7 @@ import com.rubiojdev.todolist.taskitems.mappers.TaskItemMapper;
 import com.rubiojdev.todolist.taskitems.repositories.TaskItemRepository;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +51,7 @@ public class TaskItemServiceImpl implements TaskItemService{
 
         Task task = taskRepository.findByIdAndUserId(taskId, userId)
                 .orElseThrow(() ->
-                        new RuntimeException("La tarea no existe o no pertenece al usuario")
+                        new EntityNotFoundException("La Tarea no existe o no pertenece al usuario")
                 );
 
         TaskItem taskItem = mapper.toEntity(taskItemCreateDto);
@@ -66,7 +67,7 @@ public class TaskItemServiceImpl implements TaskItemService{
                                               TaskItemUpdateDto taskItemUpdateDto) {
 
         TaskItem taskItem =repository.findTaskItemByIdAndTaskIdAndTaskUserId(id, taskId, userId)
-                .orElseThrow(() -> new RuntimeException("Subtarea no encontrada o no pertenece al usuario"));
+                .orElseThrow(() -> new EntityNotFoundException("Subtarea no encontrada o no pertenece al usuario"));
 
         mapper.updateEntity(taskItem, taskItemUpdateDto);
 
@@ -78,7 +79,7 @@ public class TaskItemServiceImpl implements TaskItemService{
     public void deleteTaskItem(Long userId, Long taskId, Long id) {
 
         TaskItem taskItem = repository.findTaskItemByIdAndTaskIdAndTaskUserId(id, taskId, userId)
-                .orElseThrow(() -> new RuntimeException("Subtarea no encontrada o no pertenece al usuario"));
+                .orElseThrow(() -> new EntityNotFoundException("Subtarea no encontrada o no pertenece al usuario"));
 
         repository.delete(taskItem);
     }
