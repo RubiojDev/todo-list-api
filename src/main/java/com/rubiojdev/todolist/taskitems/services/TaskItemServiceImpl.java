@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.taskitems.services;
 
+import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemUpdateDto;
@@ -9,11 +10,11 @@ import com.rubiojdev.todolist.taskitems.repositories.TaskItemRepository;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TaskItemServiceImpl implements TaskItemService{
@@ -34,16 +35,13 @@ public class TaskItemServiceImpl implements TaskItemService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskItemResponseDto> getItemsByTask(Long userId, Long taskId) {
+    public PageResponse<TaskItemResponseDto> getItemsByTask(Long userId, Long taskId, int page, int size) {
 
-        List<TaskItem> taskItems = repository.findByTaskIdAndTask_User_Id(taskId, userId);
-        List<TaskItemResponseDto> responseDtoList = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TaskItem> taskItems = repository.findByTaskIdAndTaskUserIdOrderByIdAsc(taskId, userId, pageable);
+        Page<TaskItemResponseDto> responseDtoList = taskItems.map(mapper::toResponseDto);
 
-        for (TaskItem taskItem : taskItems) {
-            responseDtoList.add(mapper.toResponseDto(taskItem));
-        }
-
-        return responseDtoList;
+        return PageResponse.toPage(responseDtoList);
     }
 
     @Override

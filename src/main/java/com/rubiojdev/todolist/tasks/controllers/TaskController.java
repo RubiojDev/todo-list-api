@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.tasks.controllers;
 
+import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
@@ -7,8 +8,11 @@ import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
 import com.rubiojdev.todolist.tasks.services.TaskService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,8 +33,11 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
-        return ResponseEntity.ok(service.getAllTasks(1L));
+    public ResponseEntity<PageResponse<TaskResponseDto>> getAllTasks(
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size) {
+
+        return ResponseEntity.ok(service.getAllTasks(1L, page, size));
     }
 
     @GetMapping("/id/{id}")
@@ -39,8 +46,12 @@ public class TaskController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<TaskResponseDto>> findAllTaskByName(@PathVariable @NotNull String name) {
-        return ResponseEntity.ok(service.findAllTaskByName(1L, name));
+    public ResponseEntity<PageResponse<TaskResponseDto>> findAllTaskByName(
+            @PathVariable @NotNull String name,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size) {
+
+        return ResponseEntity.ok(service.findAllTaskByName(1L, name, page, size));
     }
 
     @PostMapping
