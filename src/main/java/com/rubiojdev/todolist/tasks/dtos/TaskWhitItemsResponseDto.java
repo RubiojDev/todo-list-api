@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskResponseDto {
+public class TaskWhitItemsResponseDto {
 
     private Long id;
 
@@ -20,4 +20,6 @@ public class TaskResponseDto {
     private LocalDateTime updatedAt;
 
     private boolean completed;
+
+    private List<TaskItemResponseDto> taskItemDtoList;
 }

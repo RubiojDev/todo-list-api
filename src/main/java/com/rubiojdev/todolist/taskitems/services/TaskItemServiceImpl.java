@@ -36,7 +36,7 @@ public class TaskItemServiceImpl implements TaskItemService{
     @Transactional(readOnly = true)
     public List<TaskItemResponseDto> getItemsByTask(Long userId, Long taskId) {
 
-        List<TaskItem> taskItems = repository.findByTaskIdAndTaskUserId(taskId, userId);
+        List<TaskItem> taskItems = repository.findByTaskIdAndTask_User_Id(taskId, userId);
         List<TaskItemResponseDto> responseDtoList = new ArrayList<>();
 
         for (TaskItem taskItem : taskItems) {
@@ -67,7 +67,7 @@ public class TaskItemServiceImpl implements TaskItemService{
     public TaskItemResponseDto updateTaskItem(Long userId, Long taskId, Long id,
                                               TaskItemUpdateDto taskItemUpdateDto) {
 
-        TaskItem taskItem =repository.findTaskItemByIdAndTaskIdAndUserId(id, taskId, userId)
+        TaskItem taskItem =repository.findTaskItemByIdAndTaskIdAndTaskUserId(id, taskId, userId)
                 .orElseThrow(() -> new RuntimeException("Subtarea no encontrada o no pertenece al usuario"));
 
         mapper.updateEntity(taskItem, taskItemUpdateDto);
@@ -79,7 +79,7 @@ public class TaskItemServiceImpl implements TaskItemService{
     @Transactional
     public void deleteTaskItem(Long userId, Long taskId, Long id) {
 
-        TaskItem taskItem = repository.findTaskItemByIdAndTaskIdAndUserId(id, taskId, userId)
+        TaskItem taskItem = repository.findTaskItemByIdAndTaskIdAndTaskUserId(id, taskId, userId)
                 .orElseThrow(() -> new RuntimeException("Subtarea no encontrada o no pertenece al usuario"));
 
         repository.delete(taskItem);

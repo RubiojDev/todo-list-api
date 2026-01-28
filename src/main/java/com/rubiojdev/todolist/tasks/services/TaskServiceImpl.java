@@ -3,9 +3,12 @@ package com.rubiojdev.todolist.tasks.services;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
+import com.rubiojdev.todolist.users.entities.User;
+import com.rubiojdev.todolist.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +36,7 @@ public class TaskServiceImpl implements TaskService{
     @Transactional(readOnly = true)
     public List<TaskResponseDto> getAllTasks(Long userId) {
 
-        List<Task> tasks = repository.findAllByUserId(userId);
+        List<Task> tasks = repository.findAllByUserIdOrderByUpdatedAtDesc(userId);
         List<TaskResponseDto> taskResponseDtos = new ArrayList<>();
 
         for (Task task : tasks) {
@@ -45,12 +48,12 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public TaskResponseDto findTaskById(Long userId, Long id) {
+    public TaskWhitItemsResponseDto findTaskById(Long userId, Long id) {
 
         Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
                 .orElseThrow(() -> new RuntimeException("id no encontrado"));
 
-        return mapper.toResponseDto(task);
+        return mapper.toResponseDtoWhitItem(task);
     }
 
     @Override

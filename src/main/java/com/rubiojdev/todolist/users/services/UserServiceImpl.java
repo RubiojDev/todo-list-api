@@ -36,7 +36,9 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public UserResponseDto createNewUser(UserCreateDto dto) {
 
-        if (repository.findByUsernameOrByEmail(dto.getUsername(), dto.getEmail()).isPresent()) {
+        if (repository.existsByUsernameIgnoreCaseOrEmailIgnoreCase(
+                dto.getUsername(),
+                dto.getEmail())) {
             throw new RuntimeException("Ese nombre de Usuario o Email ya estan en uso");
         }
 
