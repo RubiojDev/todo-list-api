@@ -1,10 +1,13 @@
 package com.rubiojdev.todolist.taskitems.controllers;
 
+import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemUpdateDto;
 import com.rubiojdev.todolist.taskitems.services.TaskItemService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +29,12 @@ public class TaskItemController {
     }
 
     @GetMapping("/task/{taskId}/items")
-    public ResponseEntity <List<TaskItemResponseDto>> getItemsByTask(@PathVariable @NotNull Long taskId) {
+    public ResponseEntity <PageResponse<TaskItemResponseDto>> getItemsByTask(
+            @PathVariable @NotNull Long taskId,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size) {
 
-        return ResponseEntity.ok(service.getItemsByTask(userId, taskId));
+        return ResponseEntity.ok(service.getItemsByTask(userId, taskId, page, size));
     }
 
     @PostMapping("/task/{taskId}/items")
@@ -42,8 +48,8 @@ public class TaskItemController {
 
     @PatchMapping("/task/{taskId}/items/{id}")
     public ResponseEntity<TaskItemResponseDto> updateTaskItem(
-            @PathVariable @NotNull Long id,
             @PathVariable @NotNull Long taskId,
+            @PathVariable @NotNull Long id,
             @RequestBody @Valid TaskItemUpdateDto taskItemUpdateDto) {
 
         TaskItemResponseDto response = service.updateTaskItem(userId, taskId, id, taskItemUpdateDto);
@@ -52,8 +58,8 @@ public class TaskItemController {
 
     @DeleteMapping("/task/{taskId}/items/{id}")
     public ResponseEntity<Void> deleteTaskItem(
-            @PathVariable @NotNull Long id,
-            @PathVariable @NotNull Long taskId) {
+            @PathVariable @NotNull Long taskId,
+            @PathVariable @NotNull Long id) {
 
         service.deleteTaskItem(userId, taskId, id);
         return ResponseEntity.noContent().build();

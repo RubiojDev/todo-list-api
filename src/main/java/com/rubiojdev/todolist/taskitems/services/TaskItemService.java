@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.taskitems.services;
 
+import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemUpdateDto;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface TaskItemService {
 
-    List<TaskItemResponseDto> getItemsByTask(Long userId, Long taskId);
+    PageResponse<TaskItemResponseDto> getItemsByTask(Long userId, Long taskId, int page, int size);
 
     TaskItemResponseDto createNewTaskItem(Long userId, Long taskId,
                                                   TaskItemCreateDto taskItemCreateDto);
