@@ -6,6 +6,8 @@ import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
+import com.rubiojdev.todolist.users.entities.User;
+import com.rubiojdev.todolist.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
