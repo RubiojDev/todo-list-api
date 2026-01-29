@@ -30,7 +30,7 @@ public class TaskItemController {
 
     @GetMapping("/task/{taskId}/items")
     public ResponseEntity <PageResponse<TaskItemResponseDto>> getItemsByTask(
-            @PathVariable @NotNull Long taskId,
+            @PathVariable Long taskId,
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size) {
 
@@ -39,7 +39,7 @@ public class TaskItemController {
 
     @PostMapping("/task/{taskId}/items")
     public ResponseEntity<TaskItemResponseDto> createNewTaskItem(
-            @PathVariable @NotNull Long taskId,
+            @PathVariable Long taskId,
             @RequestBody @Valid TaskItemCreateDto taskItemCreateDto) {
 
         TaskItemResponseDto response = service.createNewTaskItem(userId, taskId, taskItemCreateDto);
@@ -48,8 +48,8 @@ public class TaskItemController {
 
     @PatchMapping("/task/{taskId}/items/{id}")
     public ResponseEntity<TaskItemResponseDto> updateTaskItem(
-            @PathVariable @NotNull Long taskId,
-            @PathVariable @NotNull Long id,
+            @PathVariable Long taskId,
+            @PathVariable Long id,
             @RequestBody @Valid TaskItemUpdateDto taskItemUpdateDto) {
 
         TaskItemResponseDto response = service.updateTaskItem(userId, taskId, id, taskItemUpdateDto);
@@ -58,8 +58,8 @@ public class TaskItemController {
 
     @DeleteMapping("/task/{taskId}/items/{id}")
     public ResponseEntity<Void> deleteTaskItem(
-            @PathVariable @NotNull Long taskId,
-            @PathVariable @NotNull Long id) {
+            @PathVariable Long taskId,
+            @PathVariable Long id) {
 
         service.deleteTaskItem(userId, taskId, id);
         return ResponseEntity.noContent().build();

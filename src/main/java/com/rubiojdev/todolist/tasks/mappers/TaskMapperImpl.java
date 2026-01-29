@@ -18,7 +18,7 @@ public class TaskMapperImpl implements TaskMapper{
     @Override
     public Task toEntity(TaskCreateDto dto) {
 
-        if (dto == null) throw new RuntimeException("Mensaje"); //crear personalizada
+        if (dto == null) throw new IllegalArgumentException("TaskCreateDto no puede ser NULL");
 
         Task task = new Task();
         task.setName(dto.getName().trim());
@@ -42,17 +42,6 @@ public class TaskMapperImpl implements TaskMapper{
         dto.setName(task.getName());
         dto.setCompleted(task.isCompleted());
         dto.setUpdatedAt(task.getUpdatedAt());
-
-        /*List<TaskItem> taskItems = task.getTaskItems();
-        List<TaskItemResponseDto> itemResponseDtoList = new ArrayList<>();
-
-        if (taskItems != null) {
-            for (TaskItem taskItem : taskItems) {
-                itemResponseDtoList.add(toTaskItemDto(taskItem));
-            }
-        }
-
-        dto.setTaskItemDtoList(itemResponseDtoList);*/
 
         return dto;
     }

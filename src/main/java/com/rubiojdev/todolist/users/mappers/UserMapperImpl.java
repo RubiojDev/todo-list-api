@@ -10,7 +10,7 @@ public class UserMapperImpl implements UserMapper{
 
     @Override
     public User toEntity(UserCreateDto dto) {
-        if (dto == null) throw new RuntimeException("UserCreateDto no puede ser NULL");
+        if (dto == null) throw new IllegalArgumentException("UserCreateDto no puede ser NULL");
 
         User user = new User();
         user.setUsername(dto.getUsername());
