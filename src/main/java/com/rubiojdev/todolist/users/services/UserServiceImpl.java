@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService{
         User user =repository.findById(userId)
                 .orElseThrow(() -> new EntotyNotFoundException("Usuario no encontrado"));
 
-
         return mapper.toResponseDto(user);
     }
 

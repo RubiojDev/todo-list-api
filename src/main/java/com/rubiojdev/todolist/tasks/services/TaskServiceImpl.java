@@ -19,9 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class TaskServiceImpl implements TaskService{
 
@@ -33,6 +30,7 @@ public class TaskServiceImpl implements TaskService{
     public TaskServiceImpl(TaskRepository taskRepository,
                            TaskMapper taskMapper,
                            UserRepository userRepository) {
+
         this.mapper = taskMapper;
         this.repository = taskRepository;
         this.userRepository = userRepository;
@@ -46,7 +44,6 @@ public class TaskServiceImpl implements TaskService{
 
         Page<Task> tasks = repository.findAllByUserIdOrderByUpdatedAtDesc(userId, pageable);
         Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
-
 
         return PageResponse.toPage(taskResponseDtos);
     }

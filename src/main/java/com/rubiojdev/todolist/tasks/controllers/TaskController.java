@@ -41,13 +41,13 @@ public class TaskController {
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<TaskWhitItemsResponseDto> findTaskById(@PathVariable @NotNull Long id) {
+    public ResponseEntity<TaskWhitItemsResponseDto> findTaskById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findTaskById(1L, id));
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<PageResponse<TaskResponseDto>> findAllTaskByName(
-            @PathVariable @NotNull String name,
+            @PathVariable String name,
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size) {
 
@@ -60,42 +60,19 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /*@PostMapping("/{taskId}/items")
-    public ResponseEntity<TaskResponseDto> createNewSubTask(
-            @PathVariable @NotNull Long taskId,
-            @RequestBody @Valid TaskItemCreateDto taskItemDto) {
-
-        TaskResponseDto response = service.createNewSubTask(taskId, taskItemDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }*/
-
     @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDto> updateTask(
-            @PathVariable @NotNull Long id,
+            @PathVariable Long id,
             @RequestBody @Valid TaskUpdateDto taskDto) {
 
         TaskResponseDto response = service.updateTask(1L, id, taskDto);
         return ResponseEntity.ok(response);
     }
 
-    /*@PatchMapping("/items/{id}")
-    public ResponseEntity<TaskResponseDto> updateSubTask(
-            @PathVariable @NotNull Long id,
-            @RequestBody @Valid TaskItemUpdateDto taskItemDto) {
-
-        TaskResponseDto response = service.update(id, taskItemDto);
-        return ResponseEntity.ok(response);
-    }*/
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable @NotNull Long id){
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         service.deleteTask(1L, id);
         return ResponseEntity.noContent().build();
     }
 
-    /*@DeleteMapping("/items/{id}")
-    public ResponseEntity<Void> deleteSubTask(@PathVariable @NotNull Long id){
-        service.deleteSubTask(id);
-        return ResponseEntity.noContent().build();
-    }*/
 }
