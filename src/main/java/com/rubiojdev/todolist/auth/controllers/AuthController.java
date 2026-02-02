@@ -2,6 +2,7 @@ package com.rubiojdev.todolist.auth.controllers;
 
 import com.rubiojdev.todolist.auth.dtos.AuthResponse;
 import com.rubiojdev.todolist.auth.dtos.LoginRequest;
+import com.rubiojdev.todolist.auth.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -2,6 +2,7 @@ package com.rubiojdev.todolist.auth.services;
 
 import com.rubiojdev.todolist.auth.dtos.AuthResponse;
 import com.rubiojdev.todolist.auth.dtos.LoginRequest;
+import com.rubiojdev.todolist.security.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
