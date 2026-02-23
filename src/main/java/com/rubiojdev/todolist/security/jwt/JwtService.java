@@ -6,27 +6,33 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private static final String SECRET = "secret-key-demo-secret-key-demo-secret-key-demo"; // min 256 bits(32 caracteres o mas;
+    @Value("${jwt.secret}")
+    private String secret;
+
     private static final long EXPIRATION = 1000 * 60 * 60; //1 hora
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(Authentication authentication) {
 
         return Jwts.builder()
+                .setIssuer("rubio.app")
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
@@ -37,6 +43,7 @@ public class JwtService {
     public String generateToken(User user) {
 
         return Jwts.builder()
+                .setIssuer("rubio.app")
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
