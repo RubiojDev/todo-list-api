@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.users.services;
 
+import com.rubiojdev.todolist.security.config.PasswordEncoderConfig;
 import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
 import com.rubiojdev.todolist.shared.exceptions.EntotyNotFoundException;
 import com.rubiojdev.todolist.users.dtos.UserCreateDto;
@@ -16,10 +17,14 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final PasswordEncoderConfig passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper,
+                           PasswordEncoderConfig passwordEncoder) {
         this.repository = userRepository;
         this.mapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -36,7 +41,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserResponseDto createNewUser(UserCreateDto dto) {
+    public User createNewUser(UserCreateDto dto) {
 
         if (repository.existsByUsernameIgnoreCaseOrEmailIgnoreCase(
                 dto.getUsername(),
@@ -44,16 +49,16 @@ public class UserServiceImpl implements UserService{
             throw new DuplicateResourceException("Ese nombre de Usuario o Email ya estan en uso");
         }
 
-        String password = dto.getPassword();
-        String passwordHash = password + "clave";
+        String passwordHash = passwordEncoder.encode(dto.getPassword());
 
         User user = mapper.toEntity(dto);
         user.setPassword(passwordHash);
 
         User result = repository.save(user);
-        UserResponseDto responseDto = mapper.toResponseDto(result);
+        //UserResponseDto responseDto = mapper.toResponseDto(result);
 
-        return responseDto;
+        //return responseDto;
+        return result;
     }
 
     @Override

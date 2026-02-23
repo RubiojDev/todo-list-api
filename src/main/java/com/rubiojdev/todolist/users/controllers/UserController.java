@@ -25,12 +25,20 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+<<<<<<< HEAD
     @PostMapping
+=======
+    /*@PostMapping
+>>>>>>> main
     public ResponseEntity<UserResponseDto> createNewUser(@RequestBody @Valid UserCreateDto dto) {
 
         UserResponseDto response = service.createNewUser(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+<<<<<<< HEAD
     }
+=======
+    }*/
+>>>>>>> main
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteCurrentUser() {
