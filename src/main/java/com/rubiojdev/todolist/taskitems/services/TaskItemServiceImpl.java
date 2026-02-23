@@ -9,6 +9,7 @@ import com.rubiojdev.todolist.taskitems.mappers.TaskItemMapper;
 import com.rubiojdev.todolist.taskitems.repositories.TaskItemRepository;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
+import com.rubiojdev.todolist.users.entities.User;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,10 +37,10 @@ public class TaskItemServiceImpl implements TaskItemService{
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<TaskItemResponseDto> getItemsByTask(Long userId, Long taskId, int page, int size) {
+    public PageResponse<TaskItemResponseDto> getItemsByTask(User user, Long taskId, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<TaskItem> taskItems = repository.findByTaskIdAndTaskUserIdOrderByIdAsc(taskId, userId, pageable);
+        Page<TaskItem> taskItems = repository.findByTaskIdAndTaskUserOrderByIdAsc(taskId, user, pageable);
         Page<TaskItemResponseDto> responseDtoList = taskItems.map(mapper::toResponseDto);
 
         return PageResponse.toPage(responseDtoList);
@@ -47,9 +48,9 @@ public class TaskItemServiceImpl implements TaskItemService{
 
     @Override
     @Transactional
-    public TaskItemResponseDto createNewTaskItem(Long userId, Long taskId, TaskItemCreateDto taskItemCreateDto) {
+    public TaskItemResponseDto createNewTaskItem(User user, Long taskId, TaskItemCreateDto taskItemCreateDto) {
 
-        Task task = taskRepository.findByIdAndUserId(taskId, userId)
+        Task task = taskRepository.findByIdAndUser(taskId, user)
                 .orElseThrow(() ->
                         new EntityNotFoundException("La Tarea no existe o no pertenece al usuario")
                 );
@@ -63,10 +64,10 @@ public class TaskItemServiceImpl implements TaskItemService{
 
     @Override
     @Transactional
-    public TaskItemResponseDto updateTaskItem(Long userId, Long taskId, Long id,
+    public TaskItemResponseDto updateTaskItem(User user, Long taskId, Long id,
                                               TaskItemUpdateDto taskItemUpdateDto) {
 
-        TaskItem taskItem =repository.findTaskItemByIdAndTaskIdAndTaskUserId(id, taskId, userId)
+        TaskItem taskItem =repository.findTaskItemByIdAndTaskIdAndTaskUser(id, taskId, user)
                 .orElseThrow(() -> new EntityNotFoundException("Subtarea no encontrada o no pertenece al usuario"));
 
         mapper.updateEntity(taskItem, taskItemUpdateDto);
@@ -76,9 +77,9 @@ public class TaskItemServiceImpl implements TaskItemService{
 
     @Override
     @Transactional
-    public void deleteTaskItem(Long userId, Long taskId, Long id) {
+    public void deleteTaskItem(User user, Long taskId, Long id) {
 
-        TaskItem taskItem = repository.findTaskItemByIdAndTaskIdAndTaskUserId(id, taskId, userId)
+        TaskItem taskItem = repository.findTaskItemByIdAndTaskIdAndTaskUser(id, taskId, user)
                 .orElseThrow(() -> new EntityNotFoundException("Subtarea no encontrada o no pertenece al usuario"));
 
         repository.delete(taskItem);

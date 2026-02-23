@@ -9,6 +9,7 @@ import com.rubiojdev.todolist.users.entities.User;
 import com.rubiojdev.todolist.users.mappers.UserMapper;
 import com.rubiojdev.todolist.users.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,11 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository repository;
     private final UserMapper mapper;
-    private final PasswordEncoderConfig passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
-                           PasswordEncoderConfig passwordEncoder) {
+                           PasswordEncoder passwordEncoder) {
         this.repository = userRepository;
         this.mapper = userMapper;
         this.passwordEncoder = passwordEncoder;
@@ -30,11 +31,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = true)
-    public UserResponseDto getCurrentUser() {
+    public UserResponseDto getCurrentUser(User user) {
 
-        Long userId = 1L;
+        /*Long userId = 1L;
         User user =repository.findById(userId)
-                .orElseThrow(() -> new EntotyNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new EntotyNotFoundException("Usuario no encontrado"));*/
 
         return mapper.toResponseDto(user);
     }
@@ -63,11 +64,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void deleteCurrentUser() {
+    public void deleteCurrentUser(User user) {
 
-        Long userId = 1L;
+       /* Long userId = 1L;
         User user = repository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));*/
 
         repository.delete(user);
     }
