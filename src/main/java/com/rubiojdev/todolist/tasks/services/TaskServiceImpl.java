@@ -38,11 +38,11 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<TaskResponseDto> getAllTasks(Long userId, int page, int size) {
+    public PageResponse<TaskResponseDto> getAllTasks(User user, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Task> tasks = repository.findAllByUserIdOrderByUpdatedAtDesc(userId, pageable);
+        Page<Task> tasks = repository.findAllByUserOrderByUpdatedAtDesc(user, pageable);
         Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
 
         return PageResponse.toPage(taskResponseDtos);
@@ -50,9 +50,9 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public TaskWhitItemsResponseDto findTaskById(Long userId, Long id) {
+    public TaskWhitItemsResponseDto findTaskById(User user, Long id) {
 
-        Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
+        Task task = repository.findTaskWithItemsByIdAndUser(user, id)
                 .orElseThrow(() -> new EntityNotFoundException("Tarea no encontrada o no pertenece al usuario"));
 
         return mapper.toResponseDtoWhitItem(task);
@@ -60,10 +60,10 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<TaskResponseDto> findAllTaskByName(Long userId, String name, int page, int size) {
+    public PageResponse<TaskResponseDto> findAllTaskByName(User user, String name, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Task> tasks = repository.findAllByNameContainingIgnoreCaseAndUserId(name, userId, pageable);
+        Page<Task> tasks = repository.findAllByNameContainingIgnoreCaseAndUser(name, user, pageable);
         Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
 
         return PageResponse.toPage(taskResponseDtos);
@@ -71,14 +71,14 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional
-    public TaskResponseDto createNewTask(Long userId, TaskCreateDto taskDto) {
+    public TaskResponseDto createNewTask(User user, TaskCreateDto taskDto) {
 
-        if (repository.existsByNameIgnoreCaseAndUserId(taskDto.getName(), userId)) {
+        if (repository.existsByNameIgnoreCaseAndUser(taskDto.getName(), user)) {
             throw new DuplicateResourceException("Ese nombre ya existe");
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no existe"));
+//        User user = userRepository.findByUser(user)
+//                .orElseThrow(() -> new EntityNotFoundException("Usuario no existe"));
 
         Task task = mapper.toEntity(taskDto);
         task.setUser(user);
@@ -89,16 +89,16 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional
-    public TaskResponseDto updateTask(Long userId, Long id, TaskUpdateDto taskDto) {
+    public TaskResponseDto updateTask(User user, Long id, TaskUpdateDto taskDto) {
 
         if (taskDto.getName() != null &&
-                repository.existsByNameIgnoreCaseAndUserIdAndIdNot(
-                        taskDto.getName(), userId, id
+                repository.existsByNameIgnoreCaseAndUserAndIdNot(
+                        taskDto.getName(), user, id
                 )) {
             throw new DuplicateResourceException("Ese nombre ya existe");
         }
 
-        Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
+        Task task = repository.findTaskWithItemsByIdAndUser(user, id)
                 .orElseThrow(() -> new EntityNotFoundException("Task no encontrada o no pertenece al usuario"));
 
         mapper.updateEntity(task, taskDto);
@@ -108,8 +108,8 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional
-    public void deleteTask(Long userId, Long id) {
-        Task task = repository.findTaskWithItemsByIdAndUserId(userId, id)
+    public void deleteTask(User user, Long id) {
+        Task task = repository.findTaskWithItemsByIdAndUser(user, id)
                 .orElseThrow(() -> new EntityNotFoundException("Task no encontrada o no pertenece al usuario"));
 
         repository.delete(task);
