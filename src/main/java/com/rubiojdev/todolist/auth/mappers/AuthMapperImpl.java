@@ -9,6 +9,7 @@ public class AuthMapperImpl implements AuthMapper{
 
     @Override
     public UserCreateDto toUserCreateDto(RegisterRequest registerRequest) {
+
         UserCreateDto dto = new UserCreateDto();
         dto.setUsername(registerRequest.getUsername());
         dto.setEmail(registerRequest.getEmail());

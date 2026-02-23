@@ -29,11 +29,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> signup(
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(
             @RequestBody @Valid RegisterRequest registerRequest) {
 
-        AuthResponse response = authService.signup(registerRequest);
+        AuthResponse response = authService.register(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

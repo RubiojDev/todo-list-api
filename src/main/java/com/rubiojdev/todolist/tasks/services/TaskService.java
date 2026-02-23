@@ -6,9 +6,6 @@ import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
 import com.rubiojdev.todolist.users.entities.User;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface TaskService {
 

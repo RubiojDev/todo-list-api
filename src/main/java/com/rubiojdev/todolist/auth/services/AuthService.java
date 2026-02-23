@@ -5,6 +5,7 @@ import com.rubiojdev.todolist.auth.dtos.LoginRequest;
 import com.rubiojdev.todolist.auth.dtos.RegisterRequest;
 import com.rubiojdev.todolist.auth.mappers.AuthMapper;
 import com.rubiojdev.todolist.security.jwt.JwtService;
+import com.rubiojdev.todolist.security.model.CustomUserDetails;
 import com.rubiojdev.todolist.users.dtos.UserCreateDto;
 import com.rubiojdev.todolist.users.entities.User;
 import com.rubiojdev.todolist.users.services.UserService;
@@ -33,6 +34,7 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
+
         Authentication authentication =
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
@@ -45,13 +47,22 @@ public class AuthService {
         return new AuthResponse(token);
     }
 
-    public AuthResponse signup(RegisterRequest registerRequest) {
+    public AuthResponse register(RegisterRequest registerRequest) {
 
         UserCreateDto userDto = mapper.toUserCreateDto(registerRequest);
 
         User user = userService.createNewUser(userDto);
 
-        String token = jwtService.generateToken(user);
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
+        String token = jwtService.generateToken(authentication);
 
         return new AuthResponse(token);
     }
