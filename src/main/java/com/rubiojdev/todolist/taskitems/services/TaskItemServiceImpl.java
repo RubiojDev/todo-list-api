@@ -1,6 +1,7 @@
 package com.rubiojdev.todolist.taskitems.services;
 
 import com.rubiojdev.todolist.shared.dto.PageResponse;
+import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemUpdateDto;
@@ -10,7 +11,6 @@ import com.rubiojdev.todolist.taskitems.repositories.TaskItemRepository;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
 import com.rubiojdev.todolist.users.entities.User;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

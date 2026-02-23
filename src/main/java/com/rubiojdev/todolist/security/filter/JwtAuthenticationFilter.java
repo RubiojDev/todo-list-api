@@ -24,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(
             JwtService jwtService,
             UserDetailsService userDetailsService) {
+
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -48,8 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
 

@@ -9,17 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-//Agrupar las querys por simple querys y las fetch querys
-
-    Page<Task> findAllByUserOrderByUpdatedAtDesc(
-            User user,
-            Pageable pageable
-    );
 
     @Query("""
             SELECT DISTINCT t
@@ -34,6 +27,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     );
 
     Optional<Task> findByIdAndUser(Long id, User user);
+
+    Page<Task> findAllByUserOrderByUpdatedAtDesc(
+            User user,
+            Pageable pageable
+    );
 
     Page<Task> findAllByNameContainingIgnoreCaseAndUser(
             String name,

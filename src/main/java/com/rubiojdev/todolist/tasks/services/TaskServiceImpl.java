@@ -2,6 +2,7 @@ package com.rubiojdev.todolist.tasks.services;
 
 import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
+import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
@@ -11,7 +12,6 @@ import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
 import com.rubiojdev.todolist.users.entities.User;
 import com.rubiojdev.todolist.users.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,17 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaskServiceImpl implements TaskService{
 
     private final TaskRepository repository;
-    private final UserRepository userRepository;
     private final TaskMapper mapper;
 
     @Autowired
     public TaskServiceImpl(TaskRepository taskRepository,
-                           TaskMapper taskMapper,
-                           UserRepository userRepository) {
+                           TaskMapper taskMapper) {
 
         this.mapper = taskMapper;
         this.repository = taskRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -76,9 +73,6 @@ public class TaskServiceImpl implements TaskService{
         if (repository.existsByNameIgnoreCaseAndUser(taskDto.getName(), user)) {
             throw new DuplicateResourceException("Ese nombre ya existe");
         }
-
-//        User user = userRepository.findByUser(user)
-//                .orElseThrow(() -> new EntityNotFoundException("Usuario no existe"));
 
         Task task = mapper.toEntity(taskDto);
         task.setUser(user);
