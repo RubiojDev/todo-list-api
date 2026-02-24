@@ -1,51 +1,46 @@
 package com.rubiojdev.todolist.tasks.repositories;
 
 import com.rubiojdev.todolist.tasks.entities.Task;
+import com.rubiojdev.todolist.users.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-//Agrupar las querys por simple querys y las fetch querys
-
-    List<Task> findAllByUserIdOrderByUpdatedAtDesc(
-            @Param("userId") Long userId
-    );
 
     @Query("""
             SELECT DISTINCT t
             FROM Task t
             LEFT JOIN FETCH t.taskItems ti
-            WHERE t.user.id = :userId
+            WHERE t.user = :user
             AND t.id = :id
             """)
-    Optional<Task> findTaskWithItemsByIdAndUserId(
-            @Param("userId") Long userId,
+    Optional<Task> findTaskWithItemsByIdAndUser(
+            @Param("user") User user,
             @Param("id") Long id
     );
 
-    Optional<Task> findByIdAndUserId(Long id, Long userId);
+    Optional<Task> findByIdAndUser(Long id, User user);
 
-    @Query("""
-            SELECT DISTINCT t
-            FROM Task t
-            LEFT JOIN FETCH t.taskItems ti
-            WHERE t.user.id = :userId
-            AND LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))
-            ORDER BY t.updatedAt ASC
-            """)
-    List<Task> findAllByNameAndUser(
-            @Param("userId") Long userId,
-            @Param("name") String name
+    Page<Task> findAllByUserOrderByUpdatedAtDesc(
+            User user,
+            Pageable pageable
     );
 
-    boolean existsByNameIgnoreCaseAndUserId(String name, Long userId);
+    Page<Task> findAllByNameContainingIgnoreCaseAndUser(
+            String name,
+            User user,
+            Pageable pageable
+    );
 
-    boolean existsByNameIgnoreCaseAndUserIdAndIdNot(String name, Long userId, Long id);
+    boolean existsByNameIgnoreCaseAndUser(String name, User user);
+
+    boolean existsByNameIgnoreCaseAndUserAndIdNot(String name, User user, Long id);
 
 }
