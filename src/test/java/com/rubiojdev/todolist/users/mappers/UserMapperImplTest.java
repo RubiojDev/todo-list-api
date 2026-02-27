@@ -18,7 +18,7 @@ class UserMapperImplTest {
     private UserMapperImpl mapper;
 
     @Test
-    void testToEntity_creatingUser_returnUser() {
+    void toEntity_creatingUser_returnUser() {
         //Arrange
         UserCreateDto createDto = new UserCreateDto(
                 "User1",
@@ -36,7 +36,7 @@ class UserMapperImplTest {
     }
 
     @Test
-    void testToEntity_nullUserCreateDto_throwIllegalArgumentException() {
+    void toEntity_nullUserCreateDto_throwIllegalArgumentException() {
         //Arrange
         UserCreateDto createDto = null;
         String expectedMessage = "UserCreateDto no puede ser NULL";
@@ -49,7 +49,7 @@ class UserMapperImplTest {
     }
 
     @Test
-    void testToResponseDto_creatingUserResponseDto_returnUserResponseDto() {
+    void toResponseDto_creatingUserResponseDto_returnUserResponseDto() {
         //Arrange
         User user = new User();
         user.setId(1L);

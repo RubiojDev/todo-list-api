@@ -39,7 +39,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testGetCurrentUser_validUser_returnsUserResponseDto() {
+    void getCurrentUser_validUser_returnsUserResponseDto() {
         // Arrange
         UserResponseDto responseDto = new UserResponseDto(
                 user.getId(),
@@ -63,7 +63,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCreateNewUser_verifyUsernameAndEmail_returnsUser() {
+    void createNewUser_verifyUsernameAndEmail_returnsUser() {
         // Arrange
         String passwordHash = "udh432";
 
@@ -93,7 +93,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCreateNewUser_existingUsernameOrEmail_throwsDuplicateResourceException() {
+    void createNewUser_existingUsernameOrEmail_throwsDuplicateResourceException() {
         // Arrange
         String expectedMessage = "Ese nombre de Usuario o Email ya estan en uso";
 
@@ -113,7 +113,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testDeleteCurrentUser_validUser_callsRepositoryDelete() {
+    void deleteCurrentUser_validUser_callsRepositoryDelete() {
         // Arrange
 
         // Act & Assert
