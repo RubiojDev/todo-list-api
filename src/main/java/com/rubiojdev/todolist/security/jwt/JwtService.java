@@ -1,7 +1,6 @@
 package com.rubiojdev.todolist.security.jwt;
 
 
-import com.rubiojdev.todolist.users.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,9 +42,13 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername())
-                && !isTokenExpired(token);
+        try {
+            final String username = extractUsername(token);
+            return username.equals(userDetails.getUsername())
+                    && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {

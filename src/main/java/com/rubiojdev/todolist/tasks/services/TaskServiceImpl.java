@@ -11,7 +11,6 @@ import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
 import com.rubiojdev.todolist.users.entities.User;
-import com.rubiojdev.todolist.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -93,7 +92,7 @@ public class TaskServiceImpl implements TaskService{
         }
 
         Task task = repository.findTaskWithItemsByIdAndUser(user, id)
-                .orElseThrow(() -> new EntityNotFoundException("Task no encontrada o no pertenece al usuario"));
+                .orElseThrow(() -> new EntityNotFoundException("Tarea no encontrada o no pertenece al usuario"));
 
         mapper.updateEntity(task, taskDto);
 
@@ -104,7 +103,7 @@ public class TaskServiceImpl implements TaskService{
     @Transactional
     public void deleteTask(User user, Long id) {
         Task task = repository.findTaskWithItemsByIdAndUser(user, id)
-                .orElseThrow(() -> new EntityNotFoundException("Task no encontrada o no pertenece al usuario"));
+                .orElseThrow(() -> new EntityNotFoundException("Tarea no encontrada o no pertenece al usuario"));
 
         repository.delete(task);
     }
