@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 class CustomUserDetailsServiceTest {
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @InjectMocks
-    CustomUserDetailsService customUserDetailsService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @Test
     void loadUserByUsername_existEmail_returnsUserDetails() {

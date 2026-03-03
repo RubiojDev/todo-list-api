@@ -34,7 +34,7 @@ class JwtAuthenticationFilterTest {
     @Mock
     private FilterChain filterChain;
     @InjectMocks
-    JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @AfterEach
     void tearDown() {
