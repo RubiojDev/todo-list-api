@@ -19,7 +19,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final long EXPIRATION = 1000 * 60 * 60; //1 hora
+    private static final long EXPIRATION = 1000 * 60 * 15; //1segundo * 1min * 15 min = 15min
 
     private Key getSigningKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secret);
@@ -27,10 +27,19 @@ public class JwtService {
     }
 
     public String generateToken(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return buildToken(userDetails);
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        return buildToken(userDetails);
+    }
+
+    private String buildToken(UserDetails userDetails) {
 
         return Jwts.builder()
                 .setIssuer("rubio.app")
-                .setSubject(authentication.getName())
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
