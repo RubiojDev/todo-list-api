@@ -2,7 +2,9 @@ package com.rubiojdev.todolist.auth.services;
 
 import com.rubiojdev.todolist.auth.dtos.AuthResponse;
 import com.rubiojdev.todolist.auth.dtos.LoginRequest;
+import com.rubiojdev.todolist.auth.dtos.RefreshTokenRequest;
 import com.rubiojdev.todolist.auth.dtos.RegisterRequest;
+import com.rubiojdev.todolist.auth.entities.RefreshToken;
 import com.rubiojdev.todolist.auth.mappers.AuthMapper;
 import com.rubiojdev.todolist.security.jwt.JwtService;
 import com.rubiojdev.todolist.security.model.CustomUserDetails;
@@ -13,23 +15,27 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
     private final UserService userService;
+    private final JwtService jwtService;
     private final AuthMapper mapper;
 
     public AuthService(AuthenticationManager authenticationManager,
-                       JwtService jwtService,
+                       RefreshTokenService refreshTokenService,
                        UserService userService,
+                       JwtService jwtService,
                        AuthMapper mapper) {
 
         this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
+        this.refreshTokenService = refreshTokenService;
         this.userService = userService;
+        this.jwtService = jwtService;
         this.mapper = mapper;
     }
 
@@ -43,10 +49,16 @@ public class AuthService {
                         )
                 );
 
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userDetails.getUser();
+
         String token = jwtService.generateToken(authentication);
-        return new AuthResponse(token);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
+        return new AuthResponse(token, refreshToken.getToken());
     }
 
+    @Transactional
     public AuthResponse register(RegisterRequest registerRequest) {
 
         UserCreateDto userDto = mapper.toUserCreateDto(registerRequest);
@@ -55,15 +67,36 @@ public class AuthService {
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
 
-        UsernamePasswordAuthenticationToken authentication =
+        /*UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
-                );
+                );*/
 
-        String token = jwtService.generateToken(authentication);
+        String token = jwtService.generateToken(userDetails);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
-        return new AuthResponse(token);
+        return new AuthResponse(token, refreshToken.getToken());
+    }
+
+    public AuthResponse refreshToken(RefreshTokenRequest token) {
+
+        RefreshToken refreshToken = refreshTokenService.findByToken(token.getRefreshToken());
+
+        User user = refreshToken.getUser();
+
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        String newAuthToken = jwtService.generateToken(userDetails);
+        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user);
+
+        refreshTokenService.deleteRefreshToken(refreshToken);
+
+        return new AuthResponse(newAuthToken, newRefreshToken.getToken());
+    }
+
+    public void logout(RefreshTokenRequest refreshToken) {
+        refreshTokenService.revokeToken(refreshToken.getRefreshToken());
     }
 }
