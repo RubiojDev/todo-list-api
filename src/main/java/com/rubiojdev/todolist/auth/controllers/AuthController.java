@@ -2,6 +2,7 @@ package com.rubiojdev.todolist.auth.controllers;
 
 import com.rubiojdev.todolist.auth.dtos.AuthResponse;
 import com.rubiojdev.todolist.auth.dtos.LoginRequest;
+import com.rubiojdev.todolist.auth.dtos.RefreshTokenRequest;
 import com.rubiojdev.todolist.auth.dtos.RegisterRequest;
 import com.rubiojdev.todolist.auth.services.AuthService;
 import jakarta.validation.Valid;
@@ -35,5 +36,21 @@ public class AuthController {
 
         AuthResponse response = authService.register(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refreshToken(
+            @RequestBody @Valid RefreshTokenRequest tokenRequest) {
+
+        AuthResponse response = authService.refreshToken(tokenRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestBody @Valid RefreshTokenRequest tokenRequest) {
+
+        authService.logout(tokenRequest);
+        return ResponseEntity.noContent().build();
     }
 }
