@@ -67,13 +67,6 @@ public class AuthService {
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
 
-        /*UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );*/
-
         String token = jwtService.generateToken(userDetails);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 

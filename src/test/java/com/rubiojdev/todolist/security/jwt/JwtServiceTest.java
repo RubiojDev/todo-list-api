@@ -1,5 +1,7 @@
 package com.rubiojdev.todolist.security.jwt;
 
+import com.rubiojdev.todolist.security.model.CustomUserDetails;
+import com.rubiojdev.todolist.users.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,8 +45,7 @@ class JwtServiceTest {
     void generateToken_validAuthentication_returnsValidToken() {
         //Arrange
         String username = "user@gmail.com";
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(username, null);
+        Authentication authentication = createAuthentication(username);
 
         //Act
         String token = jwtService.generateToken(authentication);
@@ -68,9 +69,7 @@ class JwtServiceTest {
     void extractUsername_validToken_returnsUsername() {
         //Arrange
         String username = "user@gmail.com";
-
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(username, null);
+        Authentication authentication = createAuthentication(username);
 
         //Act
         String token = jwtService.generateToken(authentication);
@@ -92,8 +91,7 @@ class JwtServiceTest {
                         .authorities("USER")
                         .build();
 
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(username, null);
+        Authentication authentication = createAuthentication(username);
 
         //Act
         String token = jwtService.generateToken(authentication);
@@ -107,8 +105,7 @@ class JwtServiceTest {
     @Test
     void isTokenValid_usernameMismatch_returnsFalse() {
         //Arrange
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken("user@gmail.com", null);
+        Authentication authentication = createAuthentication("user@gmail.com");
 
         UserDetails userDetails =
                 org.springframework.security.core.userdetails.User
@@ -132,7 +129,7 @@ class JwtServiceTest {
         String username = "user@gmail.com";
 
         Date now = new Date();
-        Date expiredDate = new Date(now.getTime() - 1000 * 60 * 60); // ya expirado
+        Date expiredDate = new Date(now.getTime() - 1000 * 60 * 15); // ya expirado
 
         String expiredToken = Jwts.builder()
                 .setIssuer("rubio.app")
@@ -153,5 +150,18 @@ class JwtServiceTest {
         boolean isValid = jwtService.isTokenValid(expiredToken, userDetails);
 
         assertFalse(isValid);
+    }
+
+    private Authentication createAuthentication(String username) {
+        User user = new User();
+        user.setEmail(username);
+
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        return new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
     }
 }
