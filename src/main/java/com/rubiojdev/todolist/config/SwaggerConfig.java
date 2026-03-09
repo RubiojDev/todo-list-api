@@ -17,14 +17,13 @@ import org.springframework.http.HttpHeaders;
                 description = "Api que sirve para crear distintas tareas con sus respectivos items",
                 contact = @Contact(
                         name = "Jesus Rubio",
-                        url = "MiPagina/Contact",
+                        url = "https://rubiojdev.github.io/#contact",
                         email = "jesusantoniorubiot@gmail.com"
                 ),
                 version = "1.0.0",
-                termsOfService = "MiPagina/terminos_y_servicios",
                 license = @License(
-                        name = "Standar Software Use License for MiPagina",
-                        url = "MiPagina/license"
+                        name = "Apache 2.0",
+                        url = "https://www.apache.org/licenses/LICENSE-2.0"
                 )
         ),
         servers = {

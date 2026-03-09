@@ -4,6 +4,7 @@ import com.rubiojdev.todolist.security.model.CustomUserDetails;
 import com.rubiojdev.todolist.shared.dto.ErrorResponse;
 import com.rubiojdev.todolist.users.dtos.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,11 +12,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-@Tag(name = "User", description = "Endpoint que sirve para obtener y borrar el usuario actual")
+@Tag(name = "User", description = "Endpoint que sirve para obtener y borrar el usuario logeado")
 public interface UserApiDocs {
 
     @Operation(
-            summary = "Obtiene el usuario actual",
+            summary = "Obtiene el usuario logeado",
             description = "Devuelve el username, email y fecha de creacion del usuario que realiza la petición",
             responses = {
                     @ApiResponse(
@@ -33,22 +34,16 @@ public interface UserApiDocs {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponse.class)
                             )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Usuario no encontrado",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorResponse.class)
-                            )
                     )
             }
     )
     ResponseEntity<UserResponseDto> getCurrentUser(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails);
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    );
 
     @Operation(
-            summary = "Borra el usuario actual",
+            summary = "Borra el usuario logeado",
             description = "Elimina el usuario autenticado que realiza la petición",
             responses = {
                     @ApiResponse(
@@ -62,17 +57,11 @@ public interface UserApiDocs {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponse.class)
                             )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Usuario no encontrado",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorResponse.class)
-                            )
                     )
             }
     )
     ResponseEntity<Void> deleteCurrentUser(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails);
+            @Parameter(hidden = true)
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    );
 }
