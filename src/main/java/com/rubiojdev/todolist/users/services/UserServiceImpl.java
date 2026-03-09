@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.users.services;
 
+import com.rubiojdev.todolist.auth.repositories.RefreshTokenRepository;
 import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
 import com.rubiojdev.todolist.users.dtos.UserCreateDto;
 import com.rubiojdev.todolist.users.dtos.UserResponseDto;
@@ -16,13 +17,16 @@ public class UserServiceImpl implements UserService{
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           RefreshTokenRepository refreshTokenRepository) {
         this.repository = userRepository;
         this.mapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
 
@@ -55,7 +59,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void deleteCurrentUser(User user) {
-
+        refreshTokenRepository.deleteByUserId(user.getId());
         repository.delete(user);
     }
 }

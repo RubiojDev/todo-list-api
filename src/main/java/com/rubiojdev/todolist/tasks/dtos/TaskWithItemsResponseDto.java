@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskWhitItemsResponseDto {
+public class TaskWithItemsResponseDto {
 
     private Long id;
 

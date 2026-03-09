@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.auth.controllers;
 
+import com.rubiojdev.todolist.auth.docs.AuthApiDocs;
 import com.rubiojdev.todolist.auth.dtos.AuthResponse;
 import com.rubiojdev.todolist.auth.dtos.LoginRequest;
 import com.rubiojdev.todolist.auth.dtos.RefreshTokenRequest;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthApiDocs {
 
     private final AuthService authService;
 
@@ -23,6 +24,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Override
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login (
             @RequestBody @Valid LoginRequest request) {
@@ -30,6 +32,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @Override
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @RequestBody @Valid RegisterRequest registerRequest) {
@@ -38,6 +41,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Override
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken(
             @RequestBody @Valid RefreshTokenRequest tokenRequest) {
@@ -46,6 +50,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
             @RequestBody @Valid RefreshTokenRequest tokenRequest) {

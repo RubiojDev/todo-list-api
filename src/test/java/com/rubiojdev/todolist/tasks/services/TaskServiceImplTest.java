@@ -7,7 +7,7 @@ import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
@@ -144,7 +144,7 @@ class TaskServiceImplTest {
 
         task1.setUpdatedAt(LocalDateTime.of(2026,02, 10, 11, 00));
         List<TaskItemResponseDto> taskItemResponseDtoList = List.of(new TaskItemResponseDto());
-        TaskWhitItemsResponseDto responseDto = new TaskWhitItemsResponseDto(
+        TaskWithItemsResponseDto responseDto = new TaskWithItemsResponseDto(
                 task1.getId(), task1.getName(), task1.getUpdatedAt(), task1.isCompleted(), taskItemResponseDtoList);
 
         when(repository.findTaskWithItemsByIdAndUser(user, userId)).thenReturn(Optional.of(task1));
@@ -152,7 +152,7 @@ class TaskServiceImplTest {
         when(mapper.toResponseDtoWhitItem(task1)).thenReturn(responseDto);
 
         //Act
-        TaskWhitItemsResponseDto result = service.findTaskById(user, userId);
+        TaskWithItemsResponseDto result = service.findTaskById(user, userId);
 
         //Assert
         Assertions.assertNotNull(result);

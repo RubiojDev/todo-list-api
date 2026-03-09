@@ -1,6 +1,7 @@
 package com.rubiojdev.todolist.users.controllers;
 
 import com.rubiojdev.todolist.security.model.CustomUserDetails;
+import com.rubiojdev.todolist.users.docs.UserApiDocs;
 import com.rubiojdev.todolist.users.dtos.UserResponseDto;
 import com.rubiojdev.todolist.users.entities.User;
 import com.rubiojdev.todolist.users.services.UserService;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserController implements UserApiDocs {
 
     private final UserService service;
 
@@ -18,6 +19,7 @@ public class UserController {
         this.service = service;
     }
 
+    @Override
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -27,6 +29,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteCurrentUser(
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {

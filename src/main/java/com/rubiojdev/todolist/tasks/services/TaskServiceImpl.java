@@ -6,7 +6,7 @@ import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     @Transactional(readOnly = true)
-    public TaskWhitItemsResponseDto findTaskById(User user, Long id) {
+    public TaskWithItemsResponseDto findTaskById(User user, Long id) {
 
         Task task = repository.findTaskWithItemsByIdAndUser(user, id)
                 .orElseThrow(() -> new EntityNotFoundException("Tarea no encontrada o no pertenece al usuario"));

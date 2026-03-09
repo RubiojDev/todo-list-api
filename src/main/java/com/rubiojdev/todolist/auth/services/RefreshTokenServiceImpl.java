@@ -2,8 +2,9 @@ package com.rubiojdev.todolist.auth.services;
 
 import com.rubiojdev.todolist.auth.entities.RefreshToken;
 import com.rubiojdev.todolist.auth.repositories.RefreshTokenRepository;
+import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
+import com.rubiojdev.todolist.shared.exceptions.InvalidTokenException;
 import com.rubiojdev.todolist.users.entities.User;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
         RefreshToken refreshToken = repository.findByToken(token).orElseThrow(() ->
                         new EntityNotFoundException("Refresh Token no encontrado"));
 
-        if (refreshToken.isRevoked()) throw new IllegalArgumentException("Refresh token Invalido");
+        if (refreshToken.isRevoked()) throw new InvalidTokenException("Refresh token Invalido");
 
         verifyExpiration(refreshToken);
 
@@ -70,7 +71,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
         if (token.getExpiryDate().isBefore(Instant.now())) {
             token.setRevoked(true);
             repository.save(token);
-            throw new IllegalArgumentException("Refresh token expirado");
+            throw new InvalidTokenException("Refresh token expirado");
         }
     }
 }
