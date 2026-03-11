@@ -4,7 +4,7 @@ import com.rubiojdev.todolist.taskitems.entities.TaskItem;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -144,7 +144,7 @@ class TaskMapperImplTest {
         task.setTaskItems(taskItems);
 
         //Act
-        TaskWhitItemsResponseDto result = mapper.toResponseDtoWhitItem(task);
+        TaskWithItemsResponseDto result = mapper.toResponseDtoWhitItem(task);
 
         //Assert
         Assertions.assertNotNull(result);
@@ -161,7 +161,7 @@ class TaskMapperImplTest {
         task.setTaskItems(null);
 
         //Act
-        TaskWhitItemsResponseDto result = mapper.toResponseDtoWhitItem(task);
+        TaskWithItemsResponseDto result = mapper.toResponseDtoWhitItem(task);
 
         //Assert
         Assertions.assertNotNull(result.getTaskItemDtoList());

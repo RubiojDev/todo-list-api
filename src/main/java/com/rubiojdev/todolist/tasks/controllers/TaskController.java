@@ -2,10 +2,11 @@ package com.rubiojdev.todolist.tasks.controllers;
 
 import com.rubiojdev.todolist.security.model.CustomUserDetails;
 import com.rubiojdev.todolist.shared.dto.PageResponse;
+import com.rubiojdev.todolist.tasks.docs.TaskApiDocs;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
 import com.rubiojdev.todolist.tasks.services.TaskService;
 import com.rubiojdev.todolist.users.entities.User;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RestController
 @RequestMapping("/tasks")
-public class TaskController {
+public class TaskController implements TaskApiDocs {
 
     private final TaskService service;
 
@@ -30,6 +31,7 @@ public class TaskController {
         this.service = taskService;
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<PageResponse<TaskResponseDto>> getAllTasks(
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -40,8 +42,9 @@ public class TaskController {
         return ResponseEntity.ok(service.getAllTasks(user, page, size));
     }
 
+    @Override
     @GetMapping("/{id}")
-    public ResponseEntity<TaskWhitItemsResponseDto> findTaskById(
+    public ResponseEntity<TaskWithItemsResponseDto> findTaskById(
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
@@ -49,6 +52,7 @@ public class TaskController {
         return ResponseEntity.ok(service.findTaskById(user, id));
     }
 
+    @Override
     @GetMapping("/name")
     public ResponseEntity<PageResponse<TaskResponseDto>> findAllTaskByName(
             @RequestParam String name,
@@ -60,6 +64,7 @@ public class TaskController {
         return ResponseEntity.ok(service.findAllTaskByName(user, name, page, size));
     }
 
+    @Override
     @PostMapping
     public ResponseEntity<TaskResponseDto> createNewTask(
             @RequestBody @Valid TaskCreateDto taskDto,
@@ -70,6 +75,7 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Override
     @PatchMapping("/{id}")
     public ResponseEntity<TaskResponseDto> updateTask(
             @PathVariable Long id,
@@ -81,6 +87,7 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable Long id,
@@ -90,5 +97,4 @@ public class TaskController {
         service.deleteTask(user, id);
         return ResponseEntity.noContent().build();
     }
-
 }

@@ -5,7 +5,7 @@ import com.rubiojdev.todolist.taskitems.entities.TaskItem;
 import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
 import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWhitItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import org.springframework.stereotype.Component;
 
@@ -47,9 +47,9 @@ public class TaskMapperImpl implements TaskMapper{
     }
 
     @Override
-    public TaskWhitItemsResponseDto toResponseDtoWhitItem(Task task) {
+    public TaskWithItemsResponseDto toResponseDtoWhitItem(Task task) {
 
-        TaskWhitItemsResponseDto dto = new TaskWhitItemsResponseDto();
+        TaskWithItemsResponseDto dto = new TaskWithItemsResponseDto();
         dto.setId(task.getId());
         dto.setName(task.getName());
         dto.setCompleted(task.isCompleted());

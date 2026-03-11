@@ -1,10 +1,11 @@
 package com.rubiojdev.todolist.shared.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 
 @Data
@@ -20,7 +21,8 @@ public class ErrorResponse {
 
     private String path;
 
-    private LocalDateTime timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Instant timestamp;
 
     private Map<String, String> fields;
 }

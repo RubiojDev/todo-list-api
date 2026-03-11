@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO utilizado para devolver información de una Tarea.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

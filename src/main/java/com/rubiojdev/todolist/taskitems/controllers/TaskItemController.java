@@ -2,6 +2,7 @@ package com.rubiojdev.todolist.taskitems.controllers;
 
 import com.rubiojdev.todolist.security.model.CustomUserDetails;
 import com.rubiojdev.todolist.shared.dto.PageResponse;
+import com.rubiojdev.todolist.taskitems.docs.TaskItemsApiDocs;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemCreateDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemUpdateDto;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RestController
-public class TaskItemController {
+public class TaskItemController implements TaskItemsApiDocs {
 
     private final TaskItemService service;
 
@@ -28,7 +29,8 @@ public class TaskItemController {
         this.service = taskItemService;
     }
 
-    @GetMapping("/task/{taskId}/items")
+    @Override
+    @GetMapping("/tasks/{taskId}/items")
     public ResponseEntity <PageResponse<TaskItemResponseDto>> getItemsByTask(
             @PathVariable Long taskId,
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -39,7 +41,8 @@ public class TaskItemController {
         return ResponseEntity.ok(service.getItemsByTask(user, taskId, page, size));
     }
 
-    @PostMapping("/task/{taskId}/items")
+    @Override
+    @PostMapping("/tasks/{taskId}/items")
     public ResponseEntity<TaskItemResponseDto> createNewTaskItem(
             @PathVariable Long taskId,
             @RequestBody @Valid TaskItemCreateDto taskItemCreateDto,
@@ -50,7 +53,8 @@ public class TaskItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PatchMapping("/task/{taskId}/items/{id}")
+    @Override
+    @PatchMapping("/tasks/{taskId}/items/{id}")
     public ResponseEntity<TaskItemResponseDto> updateTaskItem(
             @PathVariable Long taskId,
             @PathVariable Long id,
@@ -62,7 +66,8 @@ public class TaskItemController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/task/{taskId}/items/{id}")
+    @Override
+    @DeleteMapping("/tasks/{taskId}/items/{id}")
     public ResponseEntity<Void> deleteTaskItem(
             @PathVariable Long taskId,
             @PathVariable Long id,
@@ -72,5 +77,4 @@ public class TaskItemController {
         service.deleteTaskItem(user, taskId, id);
         return ResponseEntity.noContent().build();
     }
-
 }

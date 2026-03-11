@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO utilizado para devolver información de una subtarea.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
