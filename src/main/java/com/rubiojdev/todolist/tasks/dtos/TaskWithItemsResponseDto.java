@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * DTO utilizado para devolver información de una Tarea y las subtareas asociadas a ella.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

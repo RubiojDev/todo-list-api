@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.users.services;
 
+import com.rubiojdev.todolist.auth.repositories.RefreshTokenRepository;
 import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
 import com.rubiojdev.todolist.users.dtos.UserCreateDto;
 import com.rubiojdev.todolist.users.dtos.UserResponseDto;
@@ -25,6 +26,8 @@ class UserServiceImplTest {
     @Mock
     private UserRepository repository;
     @Mock
+    private RefreshTokenRepository tokenRepository;
+    @Mock
     private PasswordEncoder passwordEncoder;
     @InjectMocks
     private UserServiceImpl service;
@@ -35,6 +38,7 @@ class UserServiceImplTest {
     @BeforeEach
     public void setUp() {
         user = new User("User1", "user1@gmail.com", "1234");
+        user.setId(1L);
         createDto = new UserCreateDto("User1", "user1@gmail.com", "1234");
     }
 
@@ -119,6 +123,7 @@ class UserServiceImplTest {
         // Act & Assert
         service.deleteCurrentUser(user);
 
+        verify(tokenRepository).deleteByUserId(user.getId());
         verify(repository).delete(user);
     }
 }

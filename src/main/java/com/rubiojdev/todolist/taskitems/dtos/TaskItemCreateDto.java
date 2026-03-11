@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO utilizado para crear una nueva subtarea.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

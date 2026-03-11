@@ -2,8 +2,9 @@ package com.rubiojdev.todolist.auth.services;
 
 import com.rubiojdev.todolist.auth.entities.RefreshToken;
 import com.rubiojdev.todolist.auth.repositories.RefreshTokenRepository;
+import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
+import com.rubiojdev.todolist.shared.exceptions.InvalidTokenException;
 import com.rubiojdev.todolist.users.entities.User;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -111,7 +112,7 @@ class RefreshTokenServiceImplTest {
         when(repository.findByToken(token)).thenReturn(Optional.of(refreshToken));
 
         //Act & Assert
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () ->
+        InvalidTokenException exception = Assertions.assertThrows(InvalidTokenException.class, () ->
                 service.findByToken(token));
 
         Assertions.assertEquals(messageExpected, exception.getMessage());
@@ -133,7 +134,7 @@ class RefreshTokenServiceImplTest {
         when(repository.findByToken(token)).thenReturn(Optional.of(refreshToken));
 
         //Act & Assert
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () ->
+        InvalidTokenException exception = Assertions.assertThrows(InvalidTokenException.class, () ->
                 service.findByToken(token));
 
         Assertions.assertEquals(messageExpected, exception.getMessage());
