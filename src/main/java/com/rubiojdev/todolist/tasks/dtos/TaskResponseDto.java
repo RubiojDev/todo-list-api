@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * DTO utilizado para devolver información de una Tarea.
@@ -18,7 +18,7 @@ public class TaskResponseDto {
 
     private String name;
 
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     private boolean completed;
 }

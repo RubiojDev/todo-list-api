@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @ExtendWith(MockitoExtension.class)
 class UserMapperImplTest {
@@ -55,7 +55,7 @@ class UserMapperImplTest {
         user.setId(1L);
         user.setUsername("User1");
         user.setEmail("user1@gmail.com");
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(Instant.now());
 
         //Act
         UserResponseDto result = mapper.toResponseDto(user);
