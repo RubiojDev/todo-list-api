@@ -4,7 +4,7 @@ import com.rubiojdev.todolist.tasks.entities.Task;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class User {
     private String password;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
@@ -94,6 +94,6 @@ public class User {
      */
     @PrePersist
     private void onCreated() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
     }
 }

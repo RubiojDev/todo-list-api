@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -117,7 +117,7 @@ class TaskMapperImplTest {
         task.setId(1L);
         task.setName("Task1");
         task.setCompleted(false);
-        task.setUpdatedAt(LocalDateTime.now());
+        task.setUpdatedAt(Instant.now());
 
         //Act
         TaskResponseDto result = mapper.toResponseDto(task);
@@ -140,7 +140,7 @@ class TaskMapperImplTest {
         task.setId(1L);
         task.setName("Task1");
         task.setCompleted(false);
-        task.setUpdatedAt(LocalDateTime.now());
+        task.setUpdatedAt(Instant.now());
         task.setTaskItems(taskItems);
 
         //Act

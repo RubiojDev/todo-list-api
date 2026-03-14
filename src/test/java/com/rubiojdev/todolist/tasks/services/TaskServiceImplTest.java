@@ -25,7 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,7 +142,7 @@ class TaskServiceImplTest {
         //Arrange
         Long userId = 1L;
 
-        task1.setUpdatedAt(LocalDateTime.of(2026,02, 10, 11, 00));
+        task1.setUpdatedAt(Instant.parse("2026-02-10T11:00:00Z"));
         List<TaskItemResponseDto> taskItemResponseDtoList = List.of(new TaskItemResponseDto());
         TaskWithItemsResponseDto responseDto = new TaskWithItemsResponseDto(
                 task1.getId(), task1.getName(), task1.getUpdatedAt(), task1.isCompleted(), taskItemResponseDtoList);

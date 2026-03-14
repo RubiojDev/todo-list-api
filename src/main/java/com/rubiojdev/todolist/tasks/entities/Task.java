@@ -5,7 +5,7 @@ import com.rubiojdev.todolist.users.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,10 +78,10 @@ public class Task {
     private String name;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     @Column(nullable = false)
     private boolean completed;
@@ -121,7 +121,7 @@ public class Task {
      */
     @PrePersist
     private void onCreated() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
         this.completed = false;
     }
 
@@ -130,6 +130,6 @@ public class Task {
      */
     @PreUpdate
     private void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = Instant.now();
     }
 }

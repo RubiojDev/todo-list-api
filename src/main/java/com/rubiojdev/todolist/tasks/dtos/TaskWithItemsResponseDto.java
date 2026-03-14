@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ public class TaskWithItemsResponseDto {
 
     private String name;
 
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     private boolean completed;
 

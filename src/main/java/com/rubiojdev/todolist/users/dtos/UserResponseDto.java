@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * DTO utilizado para devolver información la información del usuario.
@@ -20,5 +20,5 @@ public class UserResponseDto {
 
     private String email;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }
