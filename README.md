@@ -27,7 +27,6 @@
   - **springdoc-openapi-starter-webmvc-ui** (Swagger UI / OpenAPI 3)
 - **Base de datos**:
   - **PostgreSQL** (entorno de desarrollo y producción)
-  - **H2 in‑memory** (entorno de tests)
 - **Build tool**: Maven (`pom.xml`)
 - **ORM**: Hibernate (vía Spring Data JPA)
 - **Mapeo y utilidades**:
@@ -153,7 +152,7 @@ La aplicación usa `server.servlet.context-path=/api` y corre en el puerto `8080
 git clone https://github.com/RubiojDev/todo-list-api.git
 ```
 
-2. Configurar PostgreSQL en `application.properties`
+2. Configurar PostgreSQL en `application-dev.properties`
 
 3. Desde la raíz del proyecto ejecutarlo
 
@@ -475,6 +474,23 @@ Incluye todos los endpoints con ejemplos de request y response
 
 ---
 
+## 🚀 Postman Collection
+
+Se ha preparado una colección de Postman que incluye todos los endpoints configurados con sus respectivos cuerpos de solicitud y variables de entorno.
+
+Cómo utilizarla:
+Descarga el archivo: Puedes encontrar el JSON de la colección en la carpeta /resources/postman del repositorio o descargarlo directamente desde el siguiente enlace:
+
+🔗 [PostmanCollection](/resources/postman/API%20Todo%20List.postman_collection.json)
+
+Importar: Abre Postman, haz clic en Import y arrastra el archivo JSON.
+
+Configurar el Entorno: La colección utiliza una variable {{base_url}}. Asegúrate de configurar tu entorno local (ej. `http://localhost:8080/api`) para que las peticiones funcionen correctamente.
+
+Flujo de Auth: La colección está configurada para capturar automáticamente el accessToken tras el login y guardarlo en una variable de entorno, por lo que no tendrás que copiar y pegar el token manualmente en cada petición.
+
+---
+
 ## 🧠 Notas de implementación
 
 - **Diseño y separación de responsabilidades**: `Controller → Service → Repository → Entity`, con DTOs para entrada/salida.
@@ -490,14 +506,17 @@ Incluye todos los endpoints con ejemplos de request y response
 
 ## 🙋 Autor
 
-- **Nombre**: Jesus Rubio  
-- **Portafolio**: `https://rubiojdev.github.io/#contact`  
+**Jesus Rubio**
+
+- **Portfolio**: https://rubiojdev.github.io  
+- **GitHub**: https://github.com/RubiojDev  
+- **GitBook (Documentación Completa)**: https://rubiojdev.gitbook.io/todo-list-api/
 - **Email**: `jesusantoniorubiot@gmail.com`
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto se distribuye bajo la licencia **Apache 2.0**, acorde a la configuración indicada en la documentación OpenAPI.  
-Consulta el archivo de licencia correspondiente si se incluye en el repositorio o visita `https://www.apache.org/licenses/LICENSE-2.0` para más detalles.
+Este proyecto está bajo la Licencia MIT.
+Esto significa que eres libre de usar, copiar, modificar, fusionar, publicar, distribuir y sublicenciar el código, siempre y cuando se incluya el aviso de copyright original. Es una licencia permisiva ideal para proyectos educativos y de código abierto.
 
