@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.security.config;
 
+import com.rubiojdev.todolist.config.CorsConfig;
 import com.rubiojdev.todolist.security.filter.JwtAuthenticationFilter;
 import com.rubiojdev.todolist.security.handler.CustomAccessDeniedHandler;
 import com.rubiojdev.todolist.security.handler.CustomAuthenticationEntryPoint;
@@ -41,6 +42,7 @@ public class SecurityConfig {
             throws Exception {
 
         http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
