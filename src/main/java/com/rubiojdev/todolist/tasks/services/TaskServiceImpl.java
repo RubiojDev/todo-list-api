@@ -3,10 +3,7 @@ package com.rubiojdev.todolist.tasks.services;
 import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
 import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
-import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.*;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,14 +69,13 @@ public class TaskServiceImpl implements TaskService{
      */
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<TaskResponseDto> getAllTasks(User user, int page, int size) {
+    public PageResponse<TaskSummaryDto> getAllTasks(User user, int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("updatedAt").descending());
 
-        Page<Task> tasks = repository.findAllByUserOrderByUpdatedAtDesc(user, pageable);
-        Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
+        Page<TaskSummaryDto> result = repository.findTaskSummaries(user, pageable);
 
-        return PageResponse.toPage(taskResponseDtos);
+        return PageResponse.toPage(result);
     }
 
     /**
@@ -120,13 +117,13 @@ public class TaskServiceImpl implements TaskService{
      */
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<TaskResponseDto> findAllTaskByName(User user, String name, int page, int size) {
+    public PageResponse<TaskSummaryDto> findAllTaskByName(User user, String name, int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Task> tasks = repository.findAllByNameContainingIgnoreCaseAndUser(name, user, pageable);
-        Page<TaskResponseDto> taskResponseDtos = tasks.map(mapper::toResponseDto);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("updatedAt").descending());
 
-        return PageResponse.toPage(taskResponseDtos);
+        Page<TaskSummaryDto> result = repository.findTaskSummariesByName(user, name, pageable);
+
+        return PageResponse.toPage(result);
     }
 
     /**

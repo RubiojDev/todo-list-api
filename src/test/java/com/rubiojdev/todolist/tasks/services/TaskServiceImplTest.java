@@ -4,10 +4,7 @@ import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.shared.exceptions.DuplicateResourceException;
 import com.rubiojdev.todolist.shared.exceptions.EntityNotFoundException;
 import com.rubiojdev.todolist.taskitems.dtos.TaskItemResponseDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.*;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.tasks.mappers.TaskMapper;
 import com.rubiojdev.todolist.tasks.repositories.TaskRepository;
@@ -20,10 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -74,44 +68,47 @@ class TaskServiceImplTest {
 
     @Test
     void getAllTasks_existingTasks_returnsPageResponse() {
-        //Arrange
-        List<Task> tasks = List.of(task1, task2);
-        Pageable pageable = PageRequest.of(numPage, sizeOfPage);
-        Page<Task> pageTask = new PageImpl<>(tasks, pageable, tasks.size());
+        // Arrange
+        Pageable pageable = PageRequest.of(numPage, sizeOfPage, Sort.by("updatedAt").descending());
 
-        when(repository.findAllByUserOrderByUpdatedAtDesc(user, pageable)).thenReturn(pageTask);
-        when(mapper.toResponseDto(any(Task.class))).thenReturn(new TaskResponseDto());
+        List<TaskSummaryDto> summaries = List.of(
+                new TaskSummaryDto(),
+                new TaskSummaryDto()
+        );
 
-        //Act
-        PageResponse<TaskResponseDto> result = service.getAllTasks(user, numPage, sizeOfPage);
+        Page<TaskSummaryDto> pageResult =
+                new PageImpl<>(summaries, pageable, summaries.size());
 
-        //Assert
+        when(repository.findTaskSummaries(user, pageable))
+                .thenReturn(pageResult);
+
+        // Act
+        PageResponse<TaskSummaryDto> result =
+                service.getAllTasks(user, numPage, sizeOfPage);
+
+        // Assert
         Assertions.assertEquals(2, result.getContent().size());
         Assertions.assertEquals(numPage, result.getPage());
         Assertions.assertEquals(sizeOfPage, result.getSize());
-        Assertions.assertTrue(result.isFirst());
-        Assertions.assertTrue(result.isLast());
 
-        verify(repository).findAllByUserOrderByUpdatedAtDesc(user, pageable);
-        verify(mapper, times(2)).toResponseDto(any(Task.class));
+        verify(repository).findTaskSummaries(user, pageable);
     }
 
     @Test
     void getAllTasks_emptyTasks_returnsPageEmpty() {
         //Arrange
-        Pageable pageable = PageRequest.of(numPage, sizeOfPage);
-        Page<Task> pageTask = Page.empty(pageable);
+        Pageable pageable = PageRequest.of(numPage, sizeOfPage, Sort.by("updatedAt").descending());
+        Page<TaskSummaryDto> pageResult = Page.empty(pageable);
 
-        when(repository.findAllByUserOrderByUpdatedAtDesc(user, pageable)).thenReturn(pageTask);
+        when(repository.findTaskSummaries(user, pageable)).thenReturn(pageResult);
 
         //Act
-        PageResponse<TaskResponseDto> result = service.getAllTasks(user, numPage, sizeOfPage);
+        PageResponse<TaskSummaryDto> result = service.getAllTasks(user, numPage, sizeOfPage);
 
         //Assert
         Assertions.assertTrue(result.getContent().isEmpty());
 
-        verify(repository).findAllByUserOrderByUpdatedAtDesc(user, pageable);
-        verify(mapper, never()).toResponseDto(any(Task.class));
+        verify(repository).findTaskSummaries(user, pageable);
     }
 
     @Test
@@ -119,22 +116,25 @@ class TaskServiceImplTest {
         //Arrange
         int page = 1;
 
-        List<Task> tasks = List.of(task1, task2);
-        Pageable pageable = PageRequest.of(page, sizeOfPage);
-        Page<Task> pageTask = new PageImpl<>(tasks, pageable, 15);
+        Pageable pageable = PageRequest.of(page, sizeOfPage, Sort.by("updatedAt").descending());
 
-        when(repository.findAllByUserOrderByUpdatedAtDesc(user, pageable)).thenReturn(pageTask);
-        when(mapper.toResponseDto(any(Task.class))).thenReturn(new TaskResponseDto());
+        List<TaskSummaryDto> summaries = List.of(
+                new TaskSummaryDto(),
+                new TaskSummaryDto()
+        );
+
+        Page<TaskSummaryDto> pageResult = new PageImpl<>(summaries, pageable, 15);
+
+        when(repository.findTaskSummaries(user, pageable)).thenReturn(pageResult);
 
         //Act
-        PageResponse<TaskResponseDto> result = service.getAllTasks(user, page, sizeOfPage);
+        PageResponse<TaskSummaryDto> result = service.getAllTasks(user, page, sizeOfPage);
 
         //Assert
         Assertions.assertFalse(result.isFirst());
         Assertions.assertFalse(result.isLast());
 
-        verify(repository).findAllByUserOrderByUpdatedAtDesc(user, pageable);
-        verify(mapper, times(2)).toResponseDto(any(Task.class));
+        verify(repository).findTaskSummaries(user, pageable);
     }
 
     @Test
@@ -189,19 +189,21 @@ class TaskServiceImplTest {
         //Arrange
         String name = "Tarea1";
 
-        List<Task> tasks = List.of(task1, task2);
-        Pageable pageable = PageRequest.of(numPage, sizeOfPage);
-        Page<Task> pageTask = new PageImpl<>(tasks, pageable, 5);
+        Pageable pageable = PageRequest.of(numPage, sizeOfPage, Sort.by("updatedAt").descending());
 
-        when(repository.findAllByNameContainingIgnoreCaseAndUser(name, user, pageable))
-                .thenReturn(pageTask);
+        List<TaskSummaryDto> summaries = List.of(
+                new TaskSummaryDto(),
+                new TaskSummaryDto()
+        );
 
-        when(mapper.toResponseDto(any(Task.class))).thenReturn(new TaskResponseDto());
+        Page<TaskSummaryDto> pageResult = new PageImpl<>(summaries, pageable, summaries.size());
 
-        //Act
-        PageResponse<TaskResponseDto> result = service.findAllTaskByName(user, name, numPage, sizeOfPage);
+        when(repository.findTaskSummariesByName(user, name, pageable)).thenReturn(pageResult);
 
-        //Assert
+        // Act
+        PageResponse<TaskSummaryDto> result = service.findAllTaskByName(user, name, numPage, sizeOfPage);
+
+        // Assert
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.getContent().size());
         Assertions.assertEquals(numPage, result.getPage());
@@ -209,8 +211,7 @@ class TaskServiceImplTest {
         Assertions.assertTrue(result.isFirst());
         Assertions.assertTrue(result.isLast());
 
-        verify(repository).findAllByNameContainingIgnoreCaseAndUser(name, user, pageable);
-        verify(mapper, times(2)).toResponseDto(any(Task.class));
+        verify(repository).findTaskSummariesByName(user, name, pageable);
     }
 
     @Test
@@ -218,19 +219,19 @@ class TaskServiceImplTest {
         //Arrange
         String name = "Tarea1";
 
-        Pageable pageable = PageRequest.of(numPage, sizeOfPage);
-        Page<Task> pageTask = Page.empty(pageable);
+        Pageable pageable = PageRequest.of(numPage, sizeOfPage, Sort.by("updatedAt").descending());
 
-        when(repository.findAllByNameContainingIgnoreCaseAndUser(name, user, pageable)).thenReturn(pageTask);
+        Page<TaskSummaryDto> pageResult = Page.empty(pageable);
 
-        //Act
-        PageResponse<TaskResponseDto> result = service.findAllTaskByName(user, name, numPage, sizeOfPage);
+        when(repository.findTaskSummariesByName(user, name, pageable)).thenReturn(pageResult);
 
-        //Assert
+        // Act
+        PageResponse<TaskSummaryDto> result = service.findAllTaskByName(user, name, numPage, sizeOfPage);
+
+        // Assert
         Assertions.assertTrue(result.getContent().isEmpty());
 
-        verify(repository).findAllByNameContainingIgnoreCaseAndUser(name, user, pageable);
-        verify(mapper, never()).toResponseDto(any(Task.class));
+        verify(repository).findTaskSummariesByName(user, name, pageable);
     }
 
     @Test

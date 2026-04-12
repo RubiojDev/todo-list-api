@@ -3,10 +3,7 @@ package com.rubiojdev.todolist.tasks.controllers;
 import com.rubiojdev.todolist.security.model.CustomUserDetails;
 import com.rubiojdev.todolist.shared.dto.PageResponse;
 import com.rubiojdev.todolist.tasks.docs.TaskApiDocs;
-import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.*;
 import com.rubiojdev.todolist.tasks.services.TaskService;
 import com.rubiojdev.todolist.users.entities.User;
 import jakarta.validation.Valid;
@@ -33,7 +30,7 @@ public class TaskController implements TaskApiDocs {
 
     @Override
     @GetMapping
-    public ResponseEntity<PageResponse<TaskResponseDto>> getAllTasks(
+    public ResponseEntity<PageResponse<TaskSummaryDto>> getAllTasks(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -54,7 +51,7 @@ public class TaskController implements TaskApiDocs {
 
     @Override
     @GetMapping("/name")
-    public ResponseEntity<PageResponse<TaskResponseDto>> findAllTaskByName(
+    public ResponseEntity<PageResponse<TaskSummaryDto>> findAllTaskByName(
             @RequestParam String name,
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) @Max(20) int size,

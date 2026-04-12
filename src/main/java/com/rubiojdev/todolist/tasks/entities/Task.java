@@ -123,6 +123,7 @@ public class Task {
     private void onCreated() {
         this.createdAt = Instant.now();
         this.completed = false;
+        this.updatedAt = Instant.now();
     }
 
     /**
@@ -130,6 +131,13 @@ public class Task {
      */
     @PreUpdate
     private void onUpdate() {
+        this.updatedAt = Instant.now();
+    }
+
+    /**
+     * Metodo de utilidad para actualizar la fecha cada vez que se cree, modifique o elimine una Subtarea
+     */
+    public void touch() {
         this.updatedAt = Instant.now();
     }
 }

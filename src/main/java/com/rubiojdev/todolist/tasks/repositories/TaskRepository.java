@@ -1,5 +1,6 @@
 package com.rubiojdev.todolist.tasks.repositories;
 
+import com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto;
 import com.rubiojdev.todolist.tasks.entities.Task;
 import com.rubiojdev.todolist.users.entities.User;
 import org.springframework.data.domain.Page;
@@ -26,9 +27,51 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("id") Long id
     );
 
+    @Query("""
+SELECT new com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto(
+    t.id,
+    t.name,
+    t.completed,
+    t.updatedAt,
+    COUNT(ti.id),
+    SUM(CASE WHEN ti.completed = false THEN 1 ELSE 0 END)
+)
+FROM Task t
+LEFT JOIN t.taskItems ti
+WHERE t.user = :user
+GROUP BY t.id, t.name, t.completed, t.updatedAt
+ORDER BY t.updatedAt DESC
+""")
+    Page<TaskSummaryDto> findTaskSummaries(
+            @Param("user") User user,
+            Pageable pageable
+    );
+
+    @Query("""
+SELECT new com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto(
+    t.id,
+    t.name,
+    t.completed,
+    t.updatedAt,
+    COUNT(ti.id),
+    SUM(CASE WHEN ti.completed = false THEN 1 ELSE 0 END)
+)
+FROM Task t
+LEFT JOIN t.taskItems ti
+WHERE t.user = :user
+AND LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))
+GROUP BY t.id, t.name, t.completed, t.updatedAt
+ORDER BY t.updatedAt DESC
+""")
+    Page<TaskSummaryDto> findTaskSummariesByName(
+            @Param("user") User user,
+            @Param("name") String name,
+            Pageable pageable
+    );
+
     Optional<Task> findByIdAndUser(Long id, User user);
 
-    Page<Task> findAllByUserOrderByUpdatedAtDesc(
+    Page<Task> findAllByUserOrderByUpdatedAtAsc(
             User user,
             Pageable pageable
     );

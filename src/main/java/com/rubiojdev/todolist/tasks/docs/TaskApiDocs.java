@@ -3,10 +3,7 @@ package com.rubiojdev.todolist.tasks.docs;
 import com.rubiojdev.todolist.security.model.CustomUserDetails;
 import com.rubiojdev.todolist.shared.dto.ErrorResponse;
 import com.rubiojdev.todolist.shared.dto.PageResponse;
-import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -53,7 +50,7 @@ public interface TaskApiDocs {
                     )
             }
     )
-    ResponseEntity<PageResponse<TaskResponseDto>> getAllTasks(
+    ResponseEntity<PageResponse<TaskSummaryDto>> getAllTasks(
             @Parameter(name = "page", description = "Número de página (empieza en 0)", example = "0")
             @RequestParam(defaultValue = "0") @Min(0) int page,
 
@@ -140,7 +137,7 @@ public interface TaskApiDocs {
                     )
             }
     )
-    ResponseEntity<PageResponse<TaskResponseDto>> findAllTaskByName(
+    ResponseEntity<PageResponse<TaskSummaryDto>> findAllTaskByName(
             @Parameter(description = "Nombre de la tarea a buscar", example = "Compras")
             @RequestParam String name,
 

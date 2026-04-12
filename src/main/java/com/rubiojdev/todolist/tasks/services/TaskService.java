@@ -1,10 +1,7 @@
 package com.rubiojdev.todolist.tasks.services;
 
 import com.rubiojdev.todolist.shared.dto.PageResponse;
-import com.rubiojdev.todolist.tasks.dtos.TaskCreateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskResponseDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskUpdateDto;
-import com.rubiojdev.todolist.tasks.dtos.TaskWithItemsResponseDto;
+import com.rubiojdev.todolist.tasks.dtos.*;
 import com.rubiojdev.todolist.users.entities.User;
 
 /**
@@ -35,7 +32,7 @@ public interface TaskService {
      * @param size cantidad de elementos por página
      * @return {@link PageResponse} que contiene la lista paginada de tareas
      */
-    PageResponse<TaskResponseDto> getAllTasks(User user, int page, int size);
+    PageResponse<TaskSummaryDto> getAllTasks(User user, int page, int size);
 
     /**
      * Obtiene una tarea específica junto con todos sus items (subtareas).
@@ -56,7 +53,7 @@ public interface TaskService {
      * @param size cantidad de elementos por página
      * @return {@link PageResponse} con las tareas que coinciden con el criterio
      */
-    PageResponse<TaskResponseDto> findAllTaskByName(User user, String name, int page, int size);
+    PageResponse<TaskSummaryDto> findAllTaskByName(User user, String name, int page, int size);
 
     /**
      * Crea una nueva tarea asociada al usuario autenticado.
