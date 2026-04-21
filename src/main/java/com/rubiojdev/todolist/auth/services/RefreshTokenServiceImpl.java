@@ -70,7 +70,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
 
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setExpiryDate(Instant.now().plus(Duration.ofDays(7)));
+        refreshToken.setExpiresAt(Instant.now().plus(Duration.ofDays(7)));
         refreshToken.setUser(user);
 
         RefreshToken savedToken = repository.save(refreshToken);
@@ -166,7 +166,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
      * @throws InvalidTokenException si el token ya ha expirado
      */
     private void verifyExpiration(RefreshToken token) {
-        if (token.getExpiryDate().isBefore(Instant.now())) {
+        if (token.getExpiresAt().isBefore(Instant.now())) {
             token.setRevoked(true);
             repository.save(token);
             throw new InvalidTokenException("Refresh token expirado");

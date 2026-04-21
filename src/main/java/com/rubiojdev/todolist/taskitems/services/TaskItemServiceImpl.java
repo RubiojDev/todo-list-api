@@ -115,6 +115,7 @@ public class TaskItemServiceImpl implements TaskItemService{
         taskItem.setTask(task);
 
         TaskItem saved = repository.save(taskItem);
+        task.touch();
         return mapper.toResponseDto(saved);
     }
 
@@ -147,6 +148,7 @@ public class TaskItemServiceImpl implements TaskItemService{
                 .orElseThrow(() -> new EntityNotFoundException("Subtarea no encontrada o no pertenece al usuario"));
 
         mapper.updateEntity(taskItem, taskItemUpdateDto);
+        taskItem.getTask().touch();
 
         return mapper.toResponseDto(taskItem);
     }
@@ -171,6 +173,7 @@ public class TaskItemServiceImpl implements TaskItemService{
         TaskItem taskItem = repository.findTaskItemByIdAndTaskIdAndTaskUser(id, taskId, user)
                 .orElseThrow(() -> new EntityNotFoundException("Subtarea no encontrada o no pertenece al usuario"));
 
+        taskItem.getTask().touch();
         repository.delete(taskItem);
     }
 }

@@ -58,15 +58,19 @@ class TaskItemServiceImplTest {
         user.setEmail("user1@gmail.com");
         user.setPassword("1234");
 
+        Task task = new Task();
+        taskId = 1L;
+        task.setId(taskId);
+
         taskItem1 = new TaskItem();
         taskItem1.setId(1L);
         taskItem1.setName("Buy Milk");
+        taskItem1.setTask(task);
 
         taskItem2 = new TaskItem();
-        taskItem1.setId(2L);
-        taskItem1.setName("Buy Coffee");
-
-        taskId = 1L;
+        taskItem2.setId(2L);
+        taskItem2.setName("Buy Coffee");
+        taskItem2.setTask(task);
 
         numPage = 0;
         sizeOfPage = 5;

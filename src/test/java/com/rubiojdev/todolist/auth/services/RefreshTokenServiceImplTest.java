@@ -17,7 +17,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -65,7 +64,7 @@ class RefreshTokenServiceImplTest {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(token);
         refreshToken.setRevoked(false);
-        refreshToken.setExpiryDate(Instant.now().plus(Duration.ofDays(7)));
+        refreshToken.setExpires_at(Instant.now().plus(Duration.ofDays(7)));
 
         when(repository.findByToken(token)).thenReturn(Optional.of(refreshToken));
 
@@ -76,7 +75,7 @@ class RefreshTokenServiceImplTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(token, result.getToken());
         Assertions.assertFalse(result.isRevoked());
-        Assertions.assertTrue(result.getExpiryDate().isAfter(Instant.now()));
+        Assertions.assertTrue(result.getExpires_at().isAfter(Instant.now()));
 
         verify(repository).findByToken(token);
     }
@@ -107,7 +106,7 @@ class RefreshTokenServiceImplTest {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(token);
         refreshToken.setRevoked(true);
-        refreshToken.setExpiryDate(Instant.now().plus(Duration.ofDays(7)));
+        refreshToken.setExpires_at(Instant.now().plus(Duration.ofDays(7)));
 
         when(repository.findByToken(token)).thenReturn(Optional.of(refreshToken));
 
@@ -129,7 +128,7 @@ class RefreshTokenServiceImplTest {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(token);
         refreshToken.setRevoked(false);
-        refreshToken.setExpiryDate(Instant.now().minusSeconds(1));
+        refreshToken.setExpires_at(Instant.now().minusSeconds(1));
 
         when(repository.findByToken(token)).thenReturn(Optional.of(refreshToken));
 
