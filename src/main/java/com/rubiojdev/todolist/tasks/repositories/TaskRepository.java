@@ -28,41 +28,41 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     );
 
     @Query("""
-SELECT new com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto(
-    t.id,
-    t.name,
-    t.completed,
-    t.updatedAt,
-    COUNT(ti.id),
-    SUM(CASE WHEN ti.completed = false THEN 1 ELSE 0 END)
-)
-FROM Task t
-LEFT JOIN t.taskItems ti
-WHERE t.user = :user
-GROUP BY t.id, t.name, t.completed, t.updatedAt
-ORDER BY t.updatedAt DESC
-""")
+            SELECT new com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto(
+                t.id,
+                t.name,
+                t.completed,
+                t.updatedAt,
+                COUNT(ti.id),
+                SUM(CASE WHEN ti.completed = false THEN 1 ELSE 0 END)
+            )
+            FROM Task t
+            LEFT JOIN t.taskItems ti
+            WHERE t.user = :user
+            GROUP BY t.id, t.name, t.completed, t.updatedAt
+            ORDER BY t.updatedAt DESC
+            """)
     Page<TaskSummaryDto> findTaskSummaries(
             @Param("user") User user,
             Pageable pageable
     );
 
     @Query("""
-SELECT new com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto(
-    t.id,
-    t.name,
-    t.completed,
-    t.updatedAt,
-    COUNT(ti.id),
-    SUM(CASE WHEN ti.completed = false THEN 1 ELSE 0 END)
-)
-FROM Task t
-LEFT JOIN t.taskItems ti
-WHERE t.user = :user
-AND LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))
-GROUP BY t.id, t.name, t.completed, t.updatedAt
-ORDER BY t.updatedAt DESC
-""")
+            SELECT new com.rubiojdev.todolist.tasks.dtos.TaskSummaryDto(
+                t.id,
+                t.name,
+                t.completed,
+                t.updatedAt,
+                COUNT(ti.id),
+                SUM(CASE WHEN ti.completed = false THEN 1 ELSE 0 END)
+            )
+            FROM Task t
+            LEFT JOIN t.taskItems ti
+            WHERE t.user = :user
+            AND LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))
+            GROUP BY t.id, t.name, t.completed, t.updatedAt
+            ORDER BY t.updatedAt DESC
+            """)
     Page<TaskSummaryDto> findTaskSummariesByName(
             @Param("user") User user,
             @Param("name") String name,

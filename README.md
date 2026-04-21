@@ -1,4 +1,4 @@
-# Todo List API
+# ![icon](/resources/icon/favicon-32.png) Todo List API
 
 ## 🚀 Introducción del proyecto
 
@@ -77,7 +77,7 @@ tasks/
  ├── controllers/   # TaskController
  ├── services/      # TaskService, TaskServiceImpl
  ├── entities/      # Task
- ├── dtos/          # TaskCreateDto, TaskUpdateDto, TaskResponseDto, TaskWithItemsResponseDto
+ ├── dtos/          # TaskCreateDto, TaskUpdateDto, TaskResponseDto, TaskSummaryDto, TaskWithItemsResponseDto
  ├── repositories/  # TaskRepository
  ├── mappers/       # TaskMapper, TaskMapperImpl
  └── docs/          # TaskApiDocs
@@ -251,10 +251,10 @@ Todos los endpoints protegidos utilizan el esquema de seguridad definido en Open
 
 ### Módulo Tasks (`/api/tasks`)
 
-- **GET** `/tasks` → `PageResponse<TaskResponseDto>`
+- **GET** `/tasks` → `PageResponse<TaskSummaryDto>`
   - Query: `page` (min 0), `size` (min 1, max 20)
 - **GET** `/tasks/{id}` → `TaskWithItemsResponseDto`
-- **GET** `/tasks/name` → `PageResponse<TaskResponseDto>`
+- **GET** `/tasks/name` → `PageResponse<TaskSummaryDto>`
   - Query: `name` (obligatorio), `page`, `size`
 - **POST** `/tasks` → `TaskResponseDto` (HTTP 201)
 - **PATCH** `/tasks/{id}` → `TaskResponseDto`
